@@ -1,0 +1,188 @@
+$cell-size: 45px;
+$border-size: 1px;
+
+$hint-border-size: 2px;
+$hint-margin: 5px;
+$hint-top-size: 70px;
+$hint-gap: 3px;
+
+$content-border-size: 4px;
+
+/* Colors */
+$hint-color: #e9edf8;
+$hint-border-color: #d7e1fd;
+$cell-border-color: #bec4d3;
+$hint-text-color: #40376c;
+$cell-color: #344861;
+$content-border-color: rgb(88, 88, 88);
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+table {
+    border-spacing: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.top-hints {
+    display: flex;
+    margin-bottom: $hint-margin;
+    margin-left: + $content-border-size;
+    background-color: #ffffff;
+    th {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        border-spacing: 0;
+        width: $cell-size - $border-size - $hint-border-size * 2 - $hint-gap;
+        height: $hint-top-size;
+        margin-left: calc(($border-size + $hint-gap) / 2);
+        margin-right: calc(($border-size + $hint-gap) / 2);
+        padding: 0;
+        background-color: $hint-color;
+        border: $hint-border-size solid $hint-border-color;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: 600;
+        color: $hint-text-color;
+        div {
+            margin: 0;
+            padding-bottom: 3px;
+            height: min-content;
+            border: none;
+            text-align: center;
+        }
+    }
+}
+
+.left-hints {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-top: $hint-top-size + $hint-border-size * 2 + $content-border-size + $hint-margin;
+    margin-right: $hint-margin;
+    padding: 0;
+    background-color: white;
+    div {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: $cell-size - $border-size - $hint-border-size * 2 - $hint-gap;
+        width: $hint-top-size;
+        margin-top: calc(($border-size + $hint-gap) / 2);
+        margin-bottom: calc(($border-size + $hint-gap) / 2);
+        background-color: $hint-color;
+        border: $hint-border-size solid $hint-border-color;
+        border-radius: 5px;
+        text-align: center;
+        div {
+            margin: 0;
+            padding: 0;
+            padding-right: 5px;
+            width: min-content;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: $hint-text-color;
+        }
+    }
+}
+
+/* Playing field */
+.row {
+    display: flex;
+    background-color: #ffffff;
+}
+.cell {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    width: $cell-size;
+    height: $cell-size;
+    padding: 0;
+    background-color: $cell-border-color;
+    cursor: pointer;
+    font-size: 20px;
+    div#cell {
+        width: calc($cell-size - $border-size);
+        height: calc($cell-size - $border-size);
+        border-radius: 7px;
+        margin: 0;
+    }
+    .empty {
+        background-color: white;
+    }
+    .colored {
+        background-color: $cell-color;
+    }
+    .crossed {
+        background-color: white;
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            background-color: gray;
+            height: $border-size + 3px;
+            border-radius: 10px;
+            top: calc($cell-size / 2 - ($border-size + 3px));
+            left: 0;
+            width: 100%;
+        }
+        &::before {
+            transform: rotate(-45deg); /* Rotate the pseudo-element */
+        }
+        &::after {
+            transform: rotate(45deg);
+        }
+    }
+}
+/* Borders styles */
+tbody {
+    border-collapse: collapse;
+    padding: relative;
+    border-top: $content-border-size solid $content-border-color;
+    border-left: $content-border-size solid $content-border-color;
+}
+
+.fifth-row-border,
+.fifth-col-border,
+.table::after,
+.table::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    background-color: $content-border-color;
+}
+
+.fifth-row-border {
+    top: -$border-size;
+    left: 0;
+    right: 0;
+    height: $border-size;
+}
+.fifth-col-border {
+    top: 0;
+    bottom: 0;
+    left: -$border-size;
+    width: $border-size;
+}
+/* bottom border */
+.table::after {
+    bottom: -3px;
+    left: 0;
+    right: -3px;
+    height: $content-border-size;
+}
+/* right border */
+.table::before {
+    top: $hint-margin + $hint-top-size + $hint-border-size * 2 - 1px;
+    bottom: 0;
+    right: -3px;
+    width: $content-border-size;
+}
