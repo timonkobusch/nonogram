@@ -1,22 +1,54 @@
-import { useState } from 'react';
 import '../css/App.scss';
+import NonogramGrid from './NonogramGrid';
+import { Nonogramm, Marking } from '../modules/Nonogramm';
+import { useEffect, useState } from 'react';
 
-function App() {
-    const [count, setCount] = useState(0);
+const App = () => {
+    const [nonogram, setNonogram] = useState(() => new Nonogramm(15));
+    const [lastGrid, setLastNonogram] = useState<Nonogramm | null>(null);
+    const [mouseDown, setMouseDown] = useState(false);
+    const [marking, setMarking] = useState(Marking.MARKING);
+
+    useEffect(() => {
+        const handleMouseUp = () => {
+            if (mouseDown) {
+                setMouseDown(false);
+            }
+        };
+        document.addEventListener('mouseup', handleMouseUp);
+    });
+    const handleUndo = () => {
+        if (lastGrid) {
+            setNonogram(lastGrid);
+            setLastNonogram(null);
+        }
+    };
+
+    const handleMouseDown = (x: number, y: number) => {
+        setLastNonogram(nonogram);
+        const updatedGrid = new Nonogramm(nonogram as Nonogramm);
+        const newMarking = updatedGrid.click(x, y);
+        setMarking(newMarking);
+        setNonogram(updatedGrid);
+        setMouseDown(true);
+    };
+
+    const handleMouseOver = (x: number, y: number) => {
+        if (mouseDown) {
+            const updatedGrid = new Nonogramm(nonogram as Nonogramm);
+            updatedGrid.setCell(x, y, marking);
+            setNonogram(updatedGrid);
+        }
+    };
 
     return (
-        <>
-            <div></div>
-            <h1>Vite + React 1</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-        </>
+        <div className="App">
+            <div className="App-header">nonogramm</div>
+            <NonogramGrid nonogram={nonogram} onMouseDownHandler={handleMouseDown} onMouseOverHandler={handleMouseOver} />
+            <button onClick={handleUndo}>back</button>
+            {(nonogram.isWon && <div className="win">You won!</div>) || <div>Test</div>}
+        </div>
     );
-}
+};
 
 export default App;
