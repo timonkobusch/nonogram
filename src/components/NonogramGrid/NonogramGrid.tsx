@@ -1,7 +1,13 @@
-import '../css/NonogramGrid.scss';
+import 'components/NonogramGrid//NonogramGrid.scss';
+import { Nonogram } from 'modules/Nonogram';
 
-const NonogramGrid = (props: any) => {
-    const { nonogram, onMouseDownHandler, onMouseOverHandler } = props;
+interface INonogramGridProps {
+    nonogram: Nonogram;
+    onMouseDownHandler: (x: number, y: number) => void;
+    onMouseOverHandler: (x: number, y: number) => void;
+}
+
+const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INonogramGridProps) => {
     return (
         <div className="content">
             <div className="left-hints">

@@ -55,7 +55,7 @@ function createHints(grid: number[][]) {
     return { rows, columns };
 }
 
-export class Nonogramm {
+export class Nonogram {
     size: number;
     grid: number[][];
     solution: number[][];
@@ -65,7 +65,7 @@ export class Nonogramm {
         columns: number[][];
     };
 
-    constructor(arg: number | Nonogramm) {
+    constructor(arg: number | Nonogram) {
         if (typeof arg === 'number') {
             this.size = arg as number;
             this.isWon = false;
@@ -75,7 +75,7 @@ export class Nonogramm {
             console.log(this.hints);
             return;
         }
-        const nonogram = arg as Nonogramm;
+        const nonogram = arg as Nonogram;
         this.size = nonogram.size;
         this.grid = nonogram.grid.map((row) => row.slice());
         this.solution = nonogram.solution.map((row) => row.slice());

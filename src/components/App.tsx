@@ -1,11 +1,11 @@
-import '../css/App.scss';
-import NonogramGrid from './NonogramGrid';
-import { Nonogramm, Marking } from '../modules/Nonogramm';
+import 'components/App.scss';
+import NonogramGrid from './NonogramGrid/NonogramGrid';
+import { Nonogram, Marking } from 'modules/Nonogram';
 import { useEffect, useState } from 'react';
 
 const App = () => {
-    const [nonogram, setNonogram] = useState(() => new Nonogramm(15));
-    const [lastGrid, setLastNonogram] = useState<Nonogramm | null>(null);
+    const [nonogram, setNonogram] = useState(() => new Nonogram(10));
+    const [lastGrid, setLastNonogram] = useState<Nonogram | null>(null);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(Marking.MARKING);
 
@@ -26,7 +26,7 @@ const App = () => {
 
     const handleMouseDown = (x: number, y: number) => {
         setLastNonogram(nonogram);
-        const updatedGrid = new Nonogramm(nonogram as Nonogramm);
+        const updatedGrid = new Nonogram(nonogram as Nonogram);
         const newMarking = updatedGrid.click(x, y);
         setMarking(newMarking);
         setNonogram(updatedGrid);
@@ -35,7 +35,7 @@ const App = () => {
 
     const handleMouseOver = (x: number, y: number) => {
         if (mouseDown) {
-            const updatedGrid = new Nonogramm(nonogram as Nonogramm);
+            const updatedGrid = new Nonogram(nonogram as Nonogram);
             updatedGrid.setCell(x, y, marking);
             setNonogram(updatedGrid);
         }
