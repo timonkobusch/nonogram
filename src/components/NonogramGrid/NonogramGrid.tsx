@@ -7,38 +7,49 @@ interface INonogramGridProps {
     onMouseOverHandler: (x: number, y: number) => void;
 }
 
+const TopHints = ({ nonogram }: { nonogram: Nonogram }) => {
+    return (
+        <thead>
+            <tr className="top-hints">
+                {Array.from({ length: nonogram.size }).map((_, i) => {
+                    return (
+                        <th key={i} className="header-cell">
+                            {nonogram.hints.columns[i].length === 0 ? (
+                                <div>0</div>
+                            ) : (
+                                nonogram.hints.columns[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
+                            )}
+                        </th>
+                    );
+                })}
+            </tr>
+        </thead>
+    );
+};
+
+const LeftHints = ({ nonogram }: { nonogram: Nonogram }) => {
+    return (
+        <div className="left-hints">
+            {Array.from({ length: nonogram.size }).map((_, i) => {
+                return (
+                    <div key={i}>
+                        {nonogram.hints.rows[i].length === 0 ? (
+                            <div>0</div>
+                        ) : (
+                            nonogram.hints.rows[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
 const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INonogramGridProps) => {
     return (
         <div className="content">
-            <div className="left-hints">
-                {Array.from({ length: nonogram.size }).map((_, i) => {
-                    return (
-                        <div key={i}>
-                            {nonogram.hints.rows[i].length === 0 ? (
-                                <div>0</div>
-                            ) : (
-                                nonogram.hints.rows[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
+            <LeftHints nonogram={nonogram} />
             <table>
-                <thead>
-                    <tr className="top-hints">
-                        {Array.from({ length: nonogram.size }).map((_, i) => {
-                            return (
-                                <th key={i} className="header-cell">
-                                    {nonogram.hints.columns[i].length === 0 ? (
-                                        <div>0</div>
-                                    ) : (
-                                        nonogram.hints.columns[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
-                                    )}
-                                </th>
-                            );
-                        })}
-                    </tr>
-                </thead>
+                <TopHints nonogram={nonogram} />
                 <tbody className="table">
                     {Array.from({ length: nonogram.size }).map((_, i) => {
                         return (
@@ -52,6 +63,12 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INon
                                             break;
                                         case 2:
                                             colored = 'crossed';
+                                            break;
+                                        case 3:
+                                            colored = 'wrongColored';
+                                            break;
+                                        case 4:
+                                            colored = 'wrongCrossed';
                                             break;
                                     }
                                     return (

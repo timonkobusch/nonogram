@@ -4,7 +4,7 @@ import { Nonogram, Marking } from 'modules/Nonogram';
 import { useEffect, useState } from 'react';
 
 const App = () => {
-    const [nonogram, setNonogram] = useState(() => new Nonogram(10));
+    const [nonogram, setNonogram] = useState(() => new Nonogram(25));
     const [lastGrid, setLastNonogram] = useState<Nonogram | null>(null);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(Marking.MARKING);
@@ -40,13 +40,18 @@ const App = () => {
             setNonogram(updatedGrid);
         }
     };
-
+    const handleSolve = () => {
+        const updatedGrid = new Nonogram(nonogram);
+        updatedGrid.solveStep();
+        setNonogram(updatedGrid);
+    };
     return (
         <div className="App">
             <div className="App-header">nonogramm</div>
             <NonogramGrid nonogram={nonogram} onMouseDownHandler={handleMouseDown} onMouseOverHandler={handleMouseOver} />
             <button onClick={handleUndo}>back</button>
             {(nonogram.isWon && <div className="win">You won!</div>) || <div>Test</div>}
+            <button onClick={handleSolve}>solve</button>
         </div>
     );
 };

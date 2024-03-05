@@ -1,3 +1,5 @@
+import NonogramHumanSolver from 'modules/NonogramHumanSolver';
+
 export enum Marking {
     MARKING = 1,
     CROSSING = 2,
@@ -8,9 +10,10 @@ function createRandomGrid(size: number) {
     const grid = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            Math.random() > 0.5 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.EMPTY);
+            Math.random() > 0.4 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.EMPTY);
         }
     }
+
     return grid;
 }
 
@@ -64,6 +67,8 @@ export class Nonogram {
         rows: number[][];
         columns: number[][];
     };
+    // debugger;
+    solver: NonogramHumanSolver;
 
     constructor(arg: number | Nonogram) {
         if (typeof arg === 'number') {
@@ -71,8 +76,10 @@ export class Nonogram {
             this.isWon = false;
             this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => Marking.EMPTY));
             this.solution = createRandomGrid(this.size);
+            console.log(this.solution);
             this.hints = createHints(this.solution);
-            console.log(this.hints);
+
+            this.solver = new NonogramHumanSolver(this);
             return;
         }
         const nonogram = arg as Nonogram;
@@ -81,8 +88,13 @@ export class Nonogram {
         this.solution = nonogram.solution.map((row) => row.slice());
         this.isWon = nonogram.isWon;
         this.hints = nonogram.hints;
+        this.solver = nonogram.solver;
+        this.solver.grid = this.grid;
     }
-
+    solveStep() {
+        this.grid = this.solver.solve();
+        this.checkWin();
+    }
     click(x: number, y: number) {
         let marking: Marking;
         if (this.grid[x][y] === Marking.MARKING) {

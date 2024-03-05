@@ -141,6 +141,30 @@ table {
             transform: rotate(45deg);
         }
     }
+    .wrongCrossed {
+        background-color: white;
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            background-color: red;
+            height: $border-size + 3px;
+            border-radius: 10px;
+            top: calc($cell-size / 2 - ($border-size + 3px));
+            left: 0;
+            width: 100%;
+        }
+        &::before {
+            transform: rotate(-45deg); /* Rotate the pseudo-element */
+        }
+        &::after {
+            transform: rotate(45deg);
+        }
+    }
+    .wrongColored {
+        background-color: red;
+    }
 }
 /* Borders styles */
 tbody {
