@@ -7,13 +7,19 @@ import PlayController from 'components/PlayController/PlayController';
 import useTimer from 'components/utils/useTimer';
 import AppHeader from 'components/AppHeader/AppHeader';
 import About from 'components/About/About';
-
+const enum MarkLock {
+    UNSET = 0,
+    ROW = 1,
+    COL = 2,
+}
 const App = () => {
     const [nonogram, setNonogram] = useState(() => new Nonogram(10));
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(Marking.MARKING);
     const { seconds, resetTimer } = useTimer(true);
+    const [clickCoords, setClickCoords] = useState({ row: 0, column: 0 });
+    const [markLock, setMarkLock] = useState(MarkLock.UNSET);
 
     useEffect(() => {
         const handleMouseUp = () => {
@@ -44,10 +50,28 @@ const App = () => {
 
         // Set mouse state
         setMouseDown(true);
+        setClickCoords({ row: y, column: x });
+        setMarkLock(MarkLock.UNSET);
     };
 
     const handleMouseOver = (x: number, y: number) => {
         if (mouseDown) {
+            if (x === clickCoords.column && y === clickCoords.row) {
+                return;
+            }
+            if (markLock === MarkLock.UNSET) {
+                if (x === clickCoords.column) {
+                    setMarkLock(MarkLock.COL);
+                } else if (y === clickCoords.row) {
+                    setMarkLock(MarkLock.ROW);
+                }
+            }
+            if (markLock === MarkLock.COL) {
+                x = clickCoords.column;
+            } else if (markLock === MarkLock.ROW) {
+                y = clickCoords.row;
+            }
+
             const updatedGrid = new Nonogram(nonogram as Nonogram);
             updatedGrid.setCell(x, y, marking);
             setNonogram(updatedGrid);
