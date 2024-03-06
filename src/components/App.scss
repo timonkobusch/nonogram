@@ -28,3 +28,34 @@
     padding: 20px;
     margin-bottom: 20px;
 }
+.App-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    width: 100%;
+}
+
+.App-content .ControlField {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    margin-right: 40px;
+    margin-left: 40px;
+    .container {
+        padding: 30px;
+        background-color: rgb(240, 240, 240);
+        border-radius: 5px;
+    }
+    button {
+        padding: 9px;
+        background-color: rgb(73, 73, 73);
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+        font-family: 'Quicksand';
+        color: white;
+        border-radius: 3px;
+    }
+}

@@ -1,0 +1,23 @@
+.gameController .generateField {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    width: 200px;
+}
+.gameController .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    button {
+        padding: 10px;
+    }
+
+    .reset {
+        width: 30%;
+    }
+    .check {
+        width: 70%;
+    }
+}
