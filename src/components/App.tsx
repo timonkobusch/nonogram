@@ -17,7 +17,8 @@ const App = () => {
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(Marking.MARKING);
-    const { seconds, resetTimer } = useTimer(true);
+    const { seconds, resetTimer, startTimer, pauseTimer } = useTimer();
+    const [gameRunning, setgameRunning] = useState(false);
     const [clickCoords, setClickCoords] = useState({ row: 0, column: 0 });
     const [markLock, setMarkLock] = useState(MarkLock.UNSET);
 
@@ -86,6 +87,14 @@ const App = () => {
         newNonogram.reset();
         setNonogram(newNonogram);
     };
+    const handlePause = () => {
+        if (gameRunning) {
+            pauseTimer();
+        } else {
+            startTimer();
+        }
+        setgameRunning(!gameRunning);
+    };
 
     return (
         <div className="App">
@@ -93,10 +102,22 @@ const App = () => {
             <div className="App-content">
                 <div className="ControlField">
                     <GameController handleGenerate={handleGenerate} handleReset={handleReset} />
-                    <PlayController progress={nonogram.progress} seconds={seconds} handleUndo={handleUndo} undoActive={nonogramHistory.length > 0} />
+                    <PlayController
+                        progress={nonogram.progress}
+                        seconds={seconds}
+                        handlePause={handlePause}
+                        gameRunning={gameRunning}
+                        handleUndo={handleUndo}
+                        undoActive={nonogramHistory.length > 0}
+                    />
                     <About />
                 </div>
-                <NonogramGrid nonogram={nonogram} onMouseDownHandler={handleMouseDown} onMouseOverHandler={handleMouseOver} />
+                <NonogramGrid
+                    nonogram={nonogram}
+                    onMouseDownHandler={handleMouseDown}
+                    onMouseOverHandler={handleMouseOver}
+                    gameRunning={gameRunning}
+                />
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { FaPause } from 'react-icons/fa';
+import { FaPause, FaPlay } from 'react-icons/fa';
 import { IoIosUndo } from 'react-icons/io';
 import './PlayController.scss';
 interface IPlayControllerProps {
@@ -10,9 +10,11 @@ interface IPlayControllerProps {
     seconds: number;
     handleUndo: () => void;
     undoActive: boolean;
+    handlePause: () => void;
+    gameRunning: boolean;
 }
 
-const PlayController = ({ progress, seconds, handleUndo, undoActive }: IPlayControllerProps) => {
+const PlayController = ({ progress, seconds, handleUndo, handlePause, undoActive, gameRunning }: IPlayControllerProps) => {
     const { isWon, cellsToBeMarked, cellsMarked } = progress;
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60);
@@ -22,9 +24,9 @@ const PlayController = ({ progress, seconds, handleUndo, undoActive }: IPlayCont
     return (
         <div className="playController container">
             <div className="timeContainer">
-                <button>
-                    <FaPause />
-                    pause
+                <button onClick={handlePause}>
+                    {gameRunning ? <FaPause /> : <FaPlay />}
+                    {gameRunning ? 'pause' : 'start'}
                 </button>
                 <div>{formatTime(seconds)}</div>
             </div>

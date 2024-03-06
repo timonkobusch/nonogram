@@ -6,6 +6,7 @@ interface INonogramGridProps {
     nonogram: Nonogram;
     onMouseDownHandler: (x: number, y: number) => void;
     onMouseOverHandler: (x: number, y: number) => void;
+    gameRunning: boolean;
 }
 
 const TopHints = ({ nonogram }: { nonogram: Nonogram }) => {
@@ -45,7 +46,7 @@ const LeftHints = ({ nonogram }: { nonogram: Nonogram }) => {
         </div>
     );
 };
-const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INonogramGridProps) => {
+const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRunning }: INonogramGridProps) => {
     const [selectedCell, setSelectedCell] = useState<{ row: number; column: number }>({ row: -1, column: -1 });
     const onMouseEnter = (x: number, y: number) => {
         setSelectedCell({ row: x, column: y });
@@ -66,6 +67,7 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INon
                                 {Array.from({ length: nonogram.size }).map((_, col) => {
                                     const fifthRowBorder = row === 4 ? 'fifth-row' : '';
                                     const highlighted = selectedCell.row === row || selectedCell.column === col ? 'highlighted' : '';
+                                    const hideCell = gameRunning ? '' : 'hide-cell';
                                     let colored = 'empty';
                                     switch (nonogram.grid[row][col]) {
                                         case 1:
@@ -87,10 +89,12 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INon
                                             className={`cell ${fifthRowBorder}`}
                                             onMouseDown={(e) => {
                                                 e.preventDefault();
+                                                if (!gameRunning) return;
                                                 onMouseDownHandler(row, col);
                                             }}
                                             onMouseOver={(e) => {
                                                 e.preventDefault();
+                                                if (!gameRunning) return;
                                                 onMouseEnter(row, col);
                                                 onMouseOverHandler(row, col);
                                             }}
@@ -98,7 +102,7 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INon
                                         >
                                             {row > 0 && row % 5 === 0 && <div className="fifth-row-border"></div>}
                                             {col > 0 && col % 5 === 0 && <div className="fifth-col-border"></div>}
-                                            <div id="cell" className={`${colored}  ${highlighted}`}></div>
+                                            <div id="cell" className={`${colored} ${highlighted} ${hideCell}`}></div>
                                         </td>
                                     );
                                 })}

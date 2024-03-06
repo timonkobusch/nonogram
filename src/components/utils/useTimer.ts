@@ -1,35 +1,35 @@
 import { useEffect, useState } from 'react';
 
-const useTimer = (initialState: boolean) => {
+const useTimer = () => {
     const [seconds, setSeconds] = useState(0);
-    const [timerActive, setTimerActive] = useState(initialState);
+    const [active, setActive] = useState(false);
 
     useEffect(() => {
-        let interval: number | null = null;
-
-        if (timerActive) {
+        let interval: number | undefined = undefined;
+        if (active) {
             interval = setInterval(() => {
                 setSeconds((prevSeconds) => prevSeconds + 1);
             }, 1000);
-        } else if (interval) {
+        } else if (!active) {
             clearInterval(interval);
         }
-
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [timerActive]);
+    }, [active]);
 
     // Function to reset the timer
-    const resetTimer = () => {
-        setSeconds(0);
-        setTimerActive(false);
-        setTimeout(() => {
-            setTimerActive(true);
-        }, 700); // Delay to simulate a resetting process
+    const resetTimer = (startAt?: number) => {
+        setActive(false);
+        setSeconds(startAt || 0);
     };
-
-    return { seconds, resetTimer };
+    const pauseTimer = () => {
+        setActive(false);
+    };
+    const startTimer = () => {
+        setActive(true);
+    };
+    return { seconds, resetTimer, pauseTimer, startTimer };
 };
 
 export default useTimer;

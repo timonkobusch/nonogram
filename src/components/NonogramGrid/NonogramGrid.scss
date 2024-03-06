@@ -11,10 +11,9 @@ $content-border-size: 4px;
 /* Colors */
 $hint-color: #e0e0e0;
 $hint-border-color: #a5a5a5;
-$cell-border-color: #bec4d3;
 $hint-text-color: #344861;
 $cell-color: #344861;
-$content-border-color: #344861;
+$cell-border-color: #bec4d3;
 
 .content {
     display: flex;
@@ -111,8 +110,11 @@ table {
     div#cell {
         width: calc($cell-size - $border-size);
         height: calc($cell-size - $border-size);
-        border-radius: 7px;
+        border-radius: 5px;
         margin: 0;
+    }
+    .hide-cell {
+        background-color: $cell-color !important;
     }
     .empty {
         background-color: white;
@@ -142,6 +144,12 @@ table {
         }
         &::after {
             transform: rotate(45deg);
+        }
+    }
+    .crossed.hide-cell {
+        &::before,
+        &::after {
+            display: none;
         }
     }
     .crossed.highlighted {
@@ -176,18 +184,24 @@ table {
 tbody {
     border-collapse: collapse;
     padding: relative;
-    border-top: $content-border-size solid $content-border-color;
-    border-left: $content-border-size solid $content-border-color;
+    border-top: $content-border-size solid $cell-color;
+    border-left: $content-border-size solid $cell-color;
 }
 
 .fifth-row-border,
-.fifth-col-border,
+.fifth-col-border {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    background-color: rgb(53, 53, 53);
+}
+
 .table::after,
 .table::before {
     content: '';
     position: absolute;
-    z-index: 1;
-    background-color: $content-border-color;
+    z-index: 2;
+    background-color: $cell-color;
 }
 
 .fifth-row-border {
