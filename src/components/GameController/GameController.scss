@@ -19,6 +19,10 @@
     button {
         padding: 10px;
     }
+    button:disabled {
+        cursor: not-allowed;
+        background-color: rgb(200, 200, 200);
+    }
 
     .reset {
         width: 30%;
