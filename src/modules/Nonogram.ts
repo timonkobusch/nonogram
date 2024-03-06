@@ -10,7 +10,7 @@ function createRandomGrid(size: number) {
     const grid = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            Math.random() > 0.4 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.EMPTY);
+            Math.random() > 0.3 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.EMPTY);
         }
     }
 
@@ -62,55 +62,74 @@ export class Nonogram {
     size: number;
     grid: number[][];
     solution: number[][];
-    isWon: boolean;
+    progress: {
+        cellsToBeMarked: number;
+        cellsMarked: number;
+        isWon: boolean;
+    };
     hints: {
         rows: number[][];
         columns: number[][];
     };
-    // debugger;
-    solver: NonogramHumanSolver;
 
     constructor(arg: number | Nonogram) {
         if (typeof arg === 'number') {
             this.size = arg as number;
-            this.isWon = false;
             this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => Marking.EMPTY));
+            console.log('creating random grid and trying to solve it...');
             this.solution = createRandomGrid(this.size);
-            console.log(this.solution);
             this.hints = createHints(this.solution);
-
-            this.solver = new NonogramHumanSolver(this);
+            let solver = new NonogramHumanSolver(this.size, this.hints, this.solution);
+            while (!solver.solve()) {
+                console.log('trying again...');
+                this.solution = createRandomGrid(this.size);
+                this.hints = createHints(this.solution);
+                solver = new NonogramHumanSolver(this.size, this.hints, this.solution);
+            }
+            this.progress = {
+                cellsToBeMarked: this.solution.flat().filter((cell) => cell === Marking.MARKING).length,
+                cellsMarked: 0,
+                isWon: false,
+            };
             return;
         }
         const nonogram = arg as Nonogram;
         this.size = nonogram.size;
         this.grid = nonogram.grid.map((row) => row.slice());
         this.solution = nonogram.solution.map((row) => row.slice());
-        this.isWon = nonogram.isWon;
+        this.progress = {
+            cellsToBeMarked: nonogram.progress.cellsToBeMarked,
+            cellsMarked: nonogram.progress.cellsMarked,
+            isWon: nonogram.progress.isWon,
+        };
         this.hints = nonogram.hints;
-        this.solver = nonogram.solver;
-        this.solver.grid = this.grid;
     }
-    solveStep() {
-        this.grid = this.solver.solve();
-        this.checkWin();
+    reset() {
+        this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => Marking.EMPTY));
+        this.progress = {
+            cellsToBeMarked: this.progress.cellsToBeMarked,
+            cellsMarked: 0,
+            isWon: false,
+        };
     }
     click(x: number, y: number) {
-        let marking: Marking;
         if (this.grid[x][y] === Marking.MARKING) {
-            this.grid[x][y] = Marking.CROSSING;
-            marking = Marking.CROSSING;
+            this.setCell(x, y, Marking.CROSSING);
+            return Marking.CROSSING;
         } else if (this.grid[x][y] === Marking.CROSSING) {
-            this.grid[x][y] = Marking.EMPTY;
-            marking = Marking.EMPTY;
+            this.setCell(x, y, Marking.EMPTY);
+            return Marking.EMPTY;
         } else {
-            this.grid[x][y] = Marking.MARKING;
-            marking = Marking.MARKING;
+            this.setCell(x, y, Marking.MARKING);
+            return Marking.MARKING;
         }
-        this.checkWin();
-        return marking;
     }
     setCell(x: number, y: number, marking: Marking) {
+        if (this.grid[x][y] === Marking.MARKING && marking !== Marking.MARKING) {
+            this.progress.cellsMarked--;
+        } else if (this.grid[x][y] !== Marking.MARKING && marking === Marking.MARKING) {
+            this.progress.cellsMarked++;
+        }
         this.grid[x][y] = marking;
         this.checkWin();
     }
@@ -119,11 +138,11 @@ export class Nonogram {
             for (let j = 0; j < this.size; j++) {
                 if (this.grid[i][j] !== this.solution[i][j]) {
                     if (this.grid[i][j] === Marking.CROSSING && this.solution[i][j] === Marking.EMPTY) continue;
-                    this.isWon = false;
+                    this.progress.isWon = false;
                     return;
                 }
             }
         }
-        this.isWon = true;
+        this.progress.isWon = true;
     }
 }

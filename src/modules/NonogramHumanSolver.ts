@@ -1,60 +1,41 @@
-import { Nonogram } from 'modules/Nonogram';
-
 export default class NonogramHumanSolver {
     readonly size;
     readonly hints;
     readonly solution;
+
     grid;
     progress;
     solvedColumns;
     solvedRows;
 
-    // debug;
-    step;
-
-    constructor({ size, hints, solution, grid }: Nonogram) {
+    constructor(size: number, hints: { rows: number[][]; columns: number[][] }, solution: number[][]) {
         this.size = size;
         this.hints = hints;
         this.solution = solution;
-        this.grid = grid;
+
+        this.grid = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
         this.progress = true;
         this.solvedColumns = new Array(size).fill(false);
         this.solvedRows = new Array(size).fill(false);
-        this.step = 0;
     }
 
     solve() {
-        this.progress = false;
-
-        this.checkOverlapping();
-        this.checkCompletedLines();
-        this.checkSpreading();
-        this.checkCompletedLines();
-
+        while (this.progress) {
+            this.progress = false;
+            this.checkOverlapping();
+            this.checkSpreading();
+            this.checkNoSpaceCrossing();
+            this.checkCompletedLines();
+        }
         if (this.checkCorrectness()) {
-            console.log('Solved in', this.step, 'steps');
+            console.log('Solved');
+            return true;
+        } else {
+            console.log('Not solved');
         }
-        if (!this.progress) {
-            console.log('No progress');
-        }
-        this.markFalseCells();
+        return false;
+    }
 
-        this.step++;
-        return this.grid;
-    }
-    markFalseCells() {
-        const { size, grid } = this;
-        for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-            for (let colIndex = 0; colIndex < size; colIndex++) {
-                if (grid[rowIndex][colIndex] === 1 && this.solution[rowIndex][colIndex] === 0) {
-                    grid[rowIndex][colIndex] = 3;
-                }
-                if (grid[rowIndex][colIndex] === 2 && this.solution[rowIndex][colIndex] === 1) {
-                    grid[rowIndex][colIndex] = 4;
-                }
-            }
-        }
-    }
     checkCorrectness() {
         const { size, grid, solution } = this;
         for (let rowIndex = 0; rowIndex < size; rowIndex++) {
@@ -68,7 +49,109 @@ export default class NonogramHumanSolver {
         }
         return true;
     }
-    // check for trivial crossing
+
+    checkNoSpaceCrossing() {
+        const { size, grid, hints, solvedColumns, solvedRows } = this;
+        // check all rows
+        for (let rowIndex = 0; rowIndex < size; rowIndex++) {
+            if (solvedRows[rowIndex]) continue;
+
+            const firstHint = hints.rows[rowIndex][0];
+            let startIndex = 0;
+            for (let colIndex = 0; colIndex < size; colIndex++) {
+                if (grid[rowIndex][colIndex] === 1 || grid[rowIndex][colIndex] === 0) {
+                    startIndex = colIndex;
+                    break;
+                }
+            }
+            for (let colIndex = startIndex; colIndex < size; colIndex++) {
+                if (grid[rowIndex][colIndex] === 1 || colIndex + 1 > firstHint + startIndex) {
+                    break;
+                } else if (grid[rowIndex][colIndex] === 2) {
+                    for (let i = startIndex; i < colIndex; i++) {
+                        if (grid[rowIndex][i] === 0) {
+                            grid[rowIndex][i] = 2;
+                            this.progress = true;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            const lastHint = hints.rows[rowIndex][hints.rows[rowIndex].length - 1];
+            let endIndex = size - 1;
+            for (let colIndex = size - 1; colIndex >= 0; colIndex--) {
+                if (grid[rowIndex][colIndex] === 1 || grid[rowIndex][colIndex] === 0) {
+                    endIndex = colIndex;
+                    break;
+                }
+            }
+            for (let colIndex = endIndex; colIndex >= 0; colIndex--) {
+                if (grid[rowIndex][colIndex] === 1 || endIndex - colIndex + 1 > lastHint) {
+                    break;
+                } else if (grid[rowIndex][colIndex] === 2) {
+                    for (let i = endIndex; i > colIndex; i--) {
+                        if (grid[rowIndex][i] === 0) {
+                            grid[rowIndex][i] = 2;
+                            this.progress = true;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        // check columns
+        for (let colIndex = 0; colIndex < size; colIndex++) {
+            if (solvedColumns[colIndex]) continue;
+
+            const firstHint = hints.columns[colIndex][0];
+            let startIndex = 0;
+
+            for (let rowIndex = 0; rowIndex < size; rowIndex++) {
+                if (grid[rowIndex][colIndex] === 1 || grid[rowIndex][colIndex] === 0) {
+                    startIndex = rowIndex;
+                    break;
+                }
+            }
+            for (let rowIndex = startIndex; rowIndex < size; rowIndex++) {
+                if (grid[rowIndex][colIndex] === 1 || rowIndex + 1 > firstHint + startIndex) {
+                    break;
+                } else if (grid[rowIndex][colIndex] === 2) {
+                    for (let i = startIndex; i < rowIndex; i++) {
+                        if (grid[i][colIndex] === 0) {
+                            grid[i][colIndex] = 2;
+                            this.progress = true;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            const lastHint = hints.columns[colIndex][hints.columns[colIndex].length - 1];
+            let endIndex = size - 1;
+
+            for (let rowIndex = size - 1; rowIndex >= 0; rowIndex--) {
+                if (grid[rowIndex][colIndex] === 1 || grid[rowIndex][colIndex] === 0) {
+                    endIndex = rowIndex;
+                    break;
+                }
+            }
+            for (let rowIndex = endIndex; rowIndex >= 0; rowIndex--) {
+                if (grid[rowIndex][colIndex] === 1 || endIndex - rowIndex + 1 > lastHint) {
+                    break;
+                } else if (grid[rowIndex][colIndex] === 2) {
+                    for (let i = endIndex; i > rowIndex; i--) {
+                        if (grid[i][colIndex] === 0) {
+                            grid[i][colIndex] = 2;
+                            this.progress = true;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     checkCompletedLines() {
         const { size, grid, solvedColumns, solvedRows, hints } = this;
