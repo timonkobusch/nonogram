@@ -1,10 +1,16 @@
-.gameController .generateField {
+.gameController {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.gameController .generateContainer {
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-bottom: 20px;
-    margin-top: 10px;
     width: 200px;
+}
+.gameController .challengesContainer {
+    font-style: italic;
 }
 .gameController .buttonContainer {
     display: flex;

@@ -4,14 +4,16 @@ import { Nonogram, Marking } from 'modules/Nonogram';
 import { useEffect, useState } from 'react';
 import GameController from 'components/GameController/GameController';
 import PlayController from 'components/PlayController/PlayController';
+import useTimer from 'components/utils/useTimer';
+import AppHeader from 'components/AppHeader/AppHeader';
+import About from 'components/About/About';
 
 const App = () => {
     const [nonogram, setNonogram] = useState(() => new Nonogram(10));
-    const [lastGrid, setLastNonogram] = useState<Nonogram | null>(null);
+    const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(Marking.MARKING);
-    const [seconds, setSeconds] = useState(0);
-    const [timerActive, setTimerActive] = useState(true);
+    const { seconds, resetTimer } = useTimer(true);
 
     useEffect(() => {
         const handleMouseUp = () => {
@@ -21,19 +23,26 @@ const App = () => {
         };
         document.addEventListener('mouseup', handleMouseUp);
     });
+
     const handleUndo = () => {
-        if (lastGrid) {
-            setNonogram(lastGrid);
-            setLastNonogram(null);
+        if (nonogramHistory.length > 0) {
+            const previousNonogram = nonogramHistory.pop();
+            if (previousNonogram) {
+                setNonogram(previousNonogram);
+                setNonogramHistory([...nonogramHistory]); // Update the history state
+            }
         }
     };
 
     const handleMouseDown = (x: number, y: number) => {
-        setLastNonogram(nonogram);
-        const updatedGrid = new Nonogram(nonogram as Nonogram);
+        setNonogramHistory([...nonogramHistory, new Nonogram(nonogram)]);
+
+        const updatedGrid = new Nonogram(nonogram);
         const newMarking = updatedGrid.click(x, y);
         setMarking(newMarking);
         setNonogram(updatedGrid);
+
+        // Set mouse state
         setMouseDown(true);
     };
 
@@ -45,12 +54,8 @@ const App = () => {
         }
     };
     const handleGenerate = (size: number) => {
-        setTimerActive(false);
         setNonogram(new Nonogram(size));
-        setSeconds(0);
-        setTimeout(() => {
-            setTimerActive(true);
-        }, 700);
+        resetTimer();
     };
     const handleReset = () => {
         const newNonogram = new Nonogram(nonogram);
@@ -58,27 +63,14 @@ const App = () => {
         setNonogram(newNonogram);
     };
 
-    useEffect(() => {
-        let interval: number | undefined;
-
-        if (timerActive) {
-            interval = setInterval(() => {
-                setSeconds((prevSeconds) => prevSeconds + 1);
-            }, 1000);
-        } else {
-            clearInterval(interval);
-        }
-
-        return () => clearInterval(interval);
-    }, [timerActive]);
-
     return (
         <div className="App">
-            <div className="App-header">nonogramm</div>
+            <AppHeader />
             <div className="App-content">
                 <div className="ControlField">
                     <GameController handleGenerate={handleGenerate} handleReset={handleReset} />
-                    <PlayController progress={nonogram.progress} seconds={seconds} />
+                    <PlayController progress={nonogram.progress} seconds={seconds} handleUndo={handleUndo} undoActive={nonogramHistory.length > 0} />
+                    <About />
                 </div>
                 <NonogramGrid nonogram={nonogram} onMouseDownHandler={handleMouseDown} onMouseOverHandler={handleMouseOver} />
             </div>

@@ -3,7 +3,7 @@ $border-size: 1px;
 
 $hint-border-size: 2px;
 $hint-margin: 5px;
-$hint-top-size: 70px;
+$hint-top-size: 120px;
 $hint-gap: 3px;
 
 $content-border-size: 4px;
@@ -20,6 +20,7 @@ $content-border-color: rgb(88, 88, 88);
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    padding-bottom: 50px;
 }
 
 table {
@@ -46,12 +47,11 @@ table {
         background-color: $hint-color;
         border: $hint-border-size solid $hint-border-color;
         border-radius: 5px;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 600;
         color: $hint-text-color;
         div {
             margin: 0;
-            padding-bottom: 3px;
             height: min-content;
             border: none;
             text-align: center;
@@ -85,7 +85,7 @@ table {
             padding-right: 5px;
             width: min-content;
             border: none;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
             color: $hint-text-color;
         }
@@ -198,15 +198,15 @@ tbody {
 }
 /* bottom border */
 .table::after {
-    bottom: -3px;
+    bottom: -4px;
     left: 0;
     right: -3px;
     height: $content-border-size;
 }
 /* right border */
 .table::before {
-    top: $hint-margin + $hint-top-size + $hint-border-size * 2 - 1px;
-    bottom: 0;
-    right: -3px;
+    top: $hint-margin + $hint-top-size + $hint-border-size * 2;
+    bottom: -4px;
+    right: -4px;
     width: $content-border-size;
 }

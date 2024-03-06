@@ -24,11 +24,15 @@ const GameController = ({ handleGenerate, handleReset }: IGameControllerProps) =
     return (
         <div className="gameController container">
             Generate Random Puzzle:
-            <div className="generateField">
+            <div className="generateContainer">
                 <div style={{ width: '110px' }}>
                     <Select defaultValue={gridOptions[0]} options={gridOptions} onChange={handleGridSizeChange} />
                 </div>
                 <button onClick={() => handleGenerate(gridSize.value)}>generate</button>
+            </div>
+            <div className="challengesContainer">
+                {' '}
+                Challenges <span>coming soon...</span>
             </div>
             <div className="buttonContainer">
                 <button className="reset" onClick={handleReset}>
