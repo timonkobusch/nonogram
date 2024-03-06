@@ -9,12 +9,12 @@ $hint-gap: 3px;
 $content-border-size: 4px;
 
 /* Colors */
-$hint-color: #e9edf8;
-$hint-border-color: #d7e1fd;
+$hint-color: #e0e0e0;
+$hint-border-color: #a5a5a5;
 $cell-border-color: #bec4d3;
-$hint-text-color: #40376c;
+$hint-text-color: #344861;
 $cell-color: #344861;
-$content-border-color: rgb(88, 88, 88);
+$content-border-color: #344861;
 
 .content {
     display: flex;
@@ -198,15 +198,15 @@ tbody {
 }
 /* bottom border */
 .table::after {
-    bottom: -4px;
+    bottom: -2px;
     left: 0;
-    right: -3px;
+    right: -2px;
     height: $content-border-size;
 }
 /* right border */
 .table::before {
     top: $hint-margin + $hint-top-size + $hint-border-size * 2;
-    bottom: -4px;
-    right: -4px;
+    bottom: -2px;
+    right: -2px;
     width: $content-border-size;
 }
