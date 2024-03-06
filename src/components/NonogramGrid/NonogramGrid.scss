@@ -117,6 +117,9 @@ table {
     .empty {
         background-color: white;
     }
+    .empty.highlighted {
+        background-color: #e3e8fc;
+    }
     .colored {
         background-color: $cell-color;
     }
@@ -140,6 +143,9 @@ table {
         &::after {
             transform: rotate(45deg);
         }
+    }
+    .crossed.highlighted {
+        background-color: #e3e8fc;
     }
     .wrongCrossed {
         background-color: white;

@@ -1,5 +1,6 @@
 import 'components/NonogramGrid//NonogramGrid.scss';
 import { Nonogram } from 'modules/Nonogram';
+import { useState } from 'react';
 
 interface INonogramGridProps {
     nonogram: Nonogram;
@@ -45,19 +46,28 @@ const LeftHints = ({ nonogram }: { nonogram: Nonogram }) => {
     );
 };
 const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INonogramGridProps) => {
+    const [selectedCell, setSelectedCell] = useState<{ row: number; column: number }>({ row: -1, column: -1 });
+    const onMouseEnter = (x: number, y: number) => {
+        setSelectedCell({ row: x, column: y });
+    };
+    const onMouseLeave = () => {
+        setSelectedCell({ row: -1, column: -1 });
+    };
+
     return (
         <div className="content">
             <LeftHints nonogram={nonogram} />
             <table>
                 <TopHints nonogram={nonogram} />
                 <tbody className="table">
-                    {Array.from({ length: nonogram.size }).map((_, i) => {
+                    {Array.from({ length: nonogram.size }).map((_, row) => {
                         return (
-                            <tr key={i} className="row">
-                                {Array.from({ length: nonogram.size }).map((_, j) => {
-                                    const fifthRowBorder = i === 4 ? 'fifth-row' : '';
+                            <tr key={row} className="row">
+                                {Array.from({ length: nonogram.size }).map((_, col) => {
+                                    const fifthRowBorder = row === 4 ? 'fifth-row' : '';
+                                    const highlighted = selectedCell.row === row || selectedCell.column === col ? 'highlighted' : '';
                                     let colored = 'empty';
-                                    switch (nonogram.grid[i][j]) {
+                                    switch (nonogram.grid[row][col]) {
                                         case 1:
                                             colored = 'colored';
                                             break;
@@ -73,20 +83,22 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler }: INon
                                     }
                                     return (
                                         <td
-                                            key={j}
+                                            key={col}
                                             className={`cell ${fifthRowBorder}`}
                                             onMouseDown={(e) => {
                                                 e.preventDefault();
-                                                onMouseDownHandler(i, j);
+                                                onMouseDownHandler(row, col);
                                             }}
                                             onMouseOver={(e) => {
                                                 e.preventDefault();
-                                                onMouseOverHandler(i, j);
+                                                onMouseEnter(row, col);
+                                                onMouseOverHandler(row, col);
                                             }}
+                                            onMouseLeave={() => onMouseLeave()}
                                         >
-                                            {i > 0 && i % 5 === 0 && <div className="fifth-row-border"></div>}
-                                            {j > 0 && j % 5 === 0 && <div className="fifth-col-border"></div>}
-                                            <div id="cell" className={`${colored}`}></div>
+                                            {row > 0 && row % 5 === 0 && <div className="fifth-row-border"></div>}
+                                            {col > 0 && col % 5 === 0 && <div className="fifth-col-border"></div>}
+                                            <div id="cell" className={`${colored}  ${highlighted}`}></div>
                                         </td>
                                     );
                                 })}
