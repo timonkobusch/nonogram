@@ -110,7 +110,7 @@ table {
     div#cell {
         width: calc($cell-size - $border-size);
         height: calc($cell-size - $border-size);
-        border-radius: 5px;
+        border-radius: 3px;
         margin: 0;
     }
     .hide-cell {
@@ -124,6 +124,9 @@ table {
     }
     .colored {
         background-color: $cell-color;
+    }
+    .colored.game-won {
+        background-color: rgb(33, 163, 61);
     }
     .crossed {
         background-color: white;
@@ -155,29 +158,12 @@ table {
     .crossed.highlighted {
         background-color: #e3e8fc;
     }
-    .wrongCrossed {
+    .crossed.game-won {
         background-color: white;
-        &::before,
-        &::after {
-            content: '';
-            position: absolute;
-            z-index: 1;
-            background-color: red;
-            height: $border-size + 3px;
-            border-radius: 10px;
-            top: calc($cell-size / 2 - ($border-size + 3px));
-            left: 0;
-            width: 100%;
-        }
-        &::before {
-            transform: rotate(-45deg); /* Rotate the pseudo-element */
-        }
-        &::after {
-            transform: rotate(45deg);
-        }
     }
-    .wrongColored {
-        background-color: red;
+    .crossed.game-won::before,
+    .crossed.game-won::after {
+        display: none;
     }
 }
 /* Borders styles */

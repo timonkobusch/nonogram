@@ -1,6 +1,6 @@
 import 'components/App.scss';
 import NonogramGrid from './NonogramGrid/NonogramGrid';
-import { Nonogram, Marking } from 'modules/Nonogram';
+import { Nonogram } from 'modules/Nonogram';
 import { useEffect, useState } from 'react';
 import GameController from 'components/GameController/GameController';
 import PlayController from 'components/PlayController/PlayController';
@@ -16,9 +16,10 @@ const App = () => {
     const [nonogram, setNonogram] = useState(() => new Nonogram(10));
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
-    const [marking, setMarking] = useState(Marking.MARKING);
+    const [marking, setMarking] = useState(true);
     const { seconds, resetTimer, startTimer, pauseTimer } = useTimer();
     const [gameRunning, setgameRunning] = useState(false);
+
     const [clickCoords, setClickCoords] = useState({ row: 0, column: 0 });
     const [markLock, setMarkLock] = useState(MarkLock.UNSET);
 
@@ -28,7 +29,17 @@ const App = () => {
                 setMouseDown(false);
             }
         };
+        const handleFKeyPress = (e: KeyboardEvent) => {
+            if (e.key === 'f') {
+                setMarking(!marking);
+            }
+        };
         document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('keypress', handleFKeyPress);
+        return () => {
+            document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('keypress', handleFKeyPress);
+        };
     });
 
     const handleUndo = () => {
@@ -45,14 +56,17 @@ const App = () => {
         setNonogramHistory([...nonogramHistory, new Nonogram(nonogram)]);
 
         const updatedGrid = new Nonogram(nonogram);
-        const newMarking = updatedGrid.click(x, y);
-        setMarking(newMarking);
+        updatedGrid.click(x, y, marking);
         setNonogram(updatedGrid);
 
         // Set mouse state
         setMouseDown(true);
         setClickCoords({ row: y, column: x });
         setMarkLock(MarkLock.UNSET);
+
+        if (updatedGrid.progress.isWon) {
+            pauseTimer();
+        }
     };
 
     const handleMouseOver = (x: number, y: number) => {
@@ -76,10 +90,16 @@ const App = () => {
             const updatedGrid = new Nonogram(nonogram as Nonogram);
             updatedGrid.setCell(x, y, marking);
             setNonogram(updatedGrid);
+            if (updatedGrid.progress.isWon) {
+                pauseTimer();
+            }
         }
     };
     const handleGenerate = (size: number) => {
         setNonogram(new Nonogram(size));
+        setgameRunning(false);
+
+        setMarking(true);
         resetTimer();
     };
     const handleReset = () => {
@@ -101,7 +121,7 @@ const App = () => {
             <AppHeader />
             <div className="App-content">
                 <div className="ControlField">
-                    <GameController handleGenerate={handleGenerate} handleReset={handleReset} />
+                    <GameController handleGenerate={handleGenerate} handleReset={handleReset} progress={nonogram.progress} />
                     <PlayController
                         progress={nonogram.progress}
                         seconds={seconds}
@@ -109,6 +129,8 @@ const App = () => {
                         gameRunning={gameRunning}
                         handleUndo={handleUndo}
                         undoActive={nonogramHistory.length > 0}
+                        marking={marking}
+                        toggleMarking={() => setMarking(!marking)}
                     />
                     <About />
                 </div>

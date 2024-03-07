@@ -9,15 +9,15 @@ interface INonogramGridProps {
     gameRunning: boolean;
 }
 
-const TopHints = ({ nonogram }: { nonogram: Nonogram }) => {
+const TopHints = ({ nonogram, gameRunning }: { nonogram: Nonogram; gameRunning: boolean }) => {
     return (
         <thead>
             <tr className="top-hints">
                 {Array.from({ length: nonogram.size }).map((_, i) => {
                     return (
                         <th key={i} className="header-cell">
-                            {nonogram.hints.columns[i].length === 0 ? (
-                                <div>0</div>
+                            {!gameRunning || nonogram.progress.isWon || nonogram.hints.columns[i].length === 0 ? (
+                                <div></div>
                             ) : (
                                 nonogram.hints.columns[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
                             )}
@@ -29,14 +29,14 @@ const TopHints = ({ nonogram }: { nonogram: Nonogram }) => {
     );
 };
 
-const LeftHints = ({ nonogram }: { nonogram: Nonogram }) => {
+const LeftHints = ({ nonogram, gameRunning }: { nonogram: Nonogram; gameRunning: boolean }) => {
     return (
         <div className="left-hints">
             {Array.from({ length: nonogram.size }).map((_, i) => {
                 return (
                     <div key={i}>
-                        {nonogram.hints.rows[i].length === 0 ? (
-                            <div>0</div>
+                        {!gameRunning || nonogram.progress.isWon || nonogram.hints.rows[i].length === 0 ? (
+                            <div></div>
                         ) : (
                             nonogram.hints.rows[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
                         )}
@@ -57,9 +57,9 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
 
     return (
         <div className="content">
-            <LeftHints nonogram={nonogram} />
+            <LeftHints nonogram={nonogram} gameRunning={gameRunning} />
             <table>
-                <TopHints nonogram={nonogram} />
+                <TopHints nonogram={nonogram} gameRunning={gameRunning} />
                 <tbody className="table">
                     {Array.from({ length: nonogram.size }).map((_, row) => {
                         return (
@@ -68,6 +68,7 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
                                     const fifthRowBorder = row === 4 ? 'fifth-row' : '';
                                     const highlighted = selectedCell.row === row || selectedCell.column === col ? 'highlighted' : '';
                                     const hideCell = gameRunning ? '' : 'hide-cell';
+                                    const gameWon = nonogram.progress.isWon ? 'game-won' : '';
                                     let colored = 'empty';
                                     switch (nonogram.grid[row][col]) {
                                         case 1:
@@ -89,12 +90,12 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
                                             className={`cell ${fifthRowBorder}`}
                                             onMouseDown={(e) => {
                                                 e.preventDefault();
-                                                if (!gameRunning) return;
+                                                if (!gameRunning || nonogram.progress.isWon) return;
                                                 onMouseDownHandler(row, col);
                                             }}
                                             onMouseOver={(e) => {
                                                 e.preventDefault();
-                                                if (!gameRunning) return;
+                                                if (!gameRunning || nonogram.progress.isWon) return;
                                                 onMouseEnter(row, col);
                                                 onMouseOverHandler(row, col);
                                             }}
@@ -102,7 +103,7 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
                                         >
                                             {row > 0 && row % 5 === 0 && <div className="fifth-row-border"></div>}
                                             {col > 0 && col % 5 === 0 && <div className="fifth-col-border"></div>}
-                                            <div id="cell" className={`${colored} ${highlighted} ${hideCell}`}></div>
+                                            <div id="cell" className={`${colored} ${highlighted} ${hideCell} ${gameWon}`}></div>
                                         </td>
                                     );
                                 })}

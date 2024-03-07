@@ -112,25 +112,28 @@ export class Nonogram {
             isWon: false,
         };
     }
-    click(x: number, y: number) {
-        if (this.grid[x][y] === Marking.MARKING) {
-            this.setCell(x, y, Marking.CROSSING);
-            return Marking.CROSSING;
-        } else if (this.grid[x][y] === Marking.CROSSING) {
-            this.setCell(x, y, Marking.EMPTY);
-            return Marking.EMPTY;
-        } else {
-            this.setCell(x, y, Marking.MARKING);
-            return Marking.MARKING;
-        }
-    }
-    setCell(x: number, y: number, marking: Marking) {
-        if (this.grid[x][y] === Marking.MARKING && marking !== Marking.MARKING) {
-            this.progress.cellsMarked--;
-        } else if (this.grid[x][y] !== Marking.MARKING && marking === Marking.MARKING) {
+    click(x: number, y: number, marking: boolean) {
+        if (this.grid[x][y] === Marking.EMPTY && marking) {
             this.progress.cellsMarked++;
+            this.grid[x][y] = Marking.MARKING;
+        } else if (this.grid[x][y] === Marking.EMPTY && !marking) {
+            this.grid[x][y] = Marking.CROSSING;
+        } else if (this.grid[x][y] === Marking.MARKING && marking) {
+            this.progress.cellsMarked--;
+            this.grid[x][y] = Marking.EMPTY;
+        } else if (this.grid[x][y] === Marking.CROSSING && !marking) {
+            this.grid[x][y] = Marking.EMPTY;
         }
-        this.grid[x][y] = marking;
+        this.checkWin();
+    }
+
+    setCell(x: number, y: number, marking: boolean) {
+        if (this.grid[x][y] === Marking.EMPTY && marking) {
+            this.progress.cellsMarked++;
+            this.grid[x][y] = Marking.MARKING;
+        } else if (this.grid[x][y] === Marking.EMPTY && !marking) {
+            this.grid[x][y] = Marking.CROSSING;
+        }
         this.checkWin();
     }
     checkWin() {
@@ -143,6 +146,15 @@ export class Nonogram {
                 }
             }
         }
+
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.grid[i][j] === Marking.EMPTY) {
+                    this.grid[i][j] = Marking.CROSSING;
+                }
+            }
+        }
+
         this.progress.isWon = true;
     }
 }

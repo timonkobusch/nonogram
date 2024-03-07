@@ -24,9 +24,72 @@
 .playController .undoContainer {
     width: 100%;
     display: flex;
-    justify-content: center;
-    button:disabled {
-        cursor: not-allowed;
-        background-color: rgb(200, 200, 200);
+    justify-content: space-between;
+}
+
+/* ToggleSwitch */
+.toggle-container {
+    display: inline-flex;
+    position: relative;
+    width: 100px; // Adjust width as needed
+    height: 40px; // Adjust height as needed
+    background-color: rgb(200, 200, 200);
+    border-radius: 30px;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    justify-content: space-between; // Ensures text is on either side
+    z-index: 1;
+
+    .slider {
+        position: absolute;
+        top: 3px;
+        bottom: 3px;
+        left: 4px;
+        background-color: rgb(73, 73, 73);
+        border-radius: 20px;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px; // Slider width
+        height: 34px; // Slider height, smaller than container for border
+        z-index: 2;
+
+        .icon {
+            position: absolute;
+            opacity: 1;
+            color: white;
+            display: flex;
+            align-items: center;
+            transition: opacity 0.2s ease-in-out;
+            transition-delay: 0.2s;
+        }
+        .icon-inactive {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    }
+
+    .toggle-text {
+        color: white;
+        font-size: 16px;
+        opacity: 0;
+        transition: 0.2s;
+        &.on-text {
+            padding-left: 10px;
+        }
+
+        &.off-text {
+            padding-right: 10px;
+        }
+
+        &.active {
+            opacity: 1;
+        }
+    }
+
+    .slider.active {
+        left: calc(100% - 44px); // Adjust so the slider moves to the end, accounting for its width
     }
 }

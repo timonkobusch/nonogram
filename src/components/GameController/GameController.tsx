@@ -5,8 +5,13 @@ import './GameController.scss';
 interface IGameControllerProps {
     handleGenerate: (size: number) => void;
     handleReset: () => void;
+    progress: {
+        isWon: boolean;
+        cellsToBeMarked: number;
+        cellsMarked: number;
+    };
 }
-const GameController = ({ handleGenerate, handleReset }: IGameControllerProps) => {
+const GameController = ({ handleGenerate, handleReset, progress }: IGameControllerProps) => {
     const gridOptions = [
         { value: 5, label: '5x5' },
         { value: 10, label: '10x10' },
@@ -35,7 +40,7 @@ const GameController = ({ handleGenerate, handleReset }: IGameControllerProps) =
                 Challenges <span>coming soon...</span>
             </div>
             <div className="buttonContainer">
-                <button className="reset" onClick={handleReset}>
+                <button className="reset" onClick={handleReset} disabled={progress.isWon}>
                     reset
                 </button>
                 <button className="check" disabled>
