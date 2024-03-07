@@ -71,6 +71,10 @@ export class Nonogram {
         rows: number[][];
         columns: number[][];
     };
+    finishedLines: {
+        rows: boolean[];
+        columns: boolean[];
+    };
 
     constructor(arg: number | Nonogram) {
         if (typeof arg === 'number') {
@@ -91,6 +95,11 @@ export class Nonogram {
                 cellsMarked: 0,
                 isWon: false,
             };
+            this.finishedLines = {
+                rows: Array.from({ length: this.size }, () => false),
+                columns: Array.from({ length: this.size }, () => false),
+            };
+
             return;
         }
         const nonogram = arg as Nonogram;
@@ -103,6 +112,7 @@ export class Nonogram {
             isWon: nonogram.progress.isWon,
         };
         this.hints = nonogram.hints;
+        this.finishedLines = nonogram.finishedLines;
     }
     reset() {
         this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => Marking.EMPTY));
@@ -124,16 +134,28 @@ export class Nonogram {
         } else if (this.grid[x][y] === Marking.CROSSING && !marking) {
             this.grid[x][y] = Marking.EMPTY;
         }
+        this.checkFinishedLines();
         this.checkWin();
     }
 
-    setCell(x: number, y: number, marking: boolean) {
+    setCell(x: number, y: number, marking: boolean, clearMode: boolean) {
+        if (clearMode) {
+            if (marking && this.grid[x][y] === Marking.MARKING) {
+                this.progress.cellsMarked--;
+                this.grid[x][y] = Marking.EMPTY;
+            } else if (!marking && this.grid[x][y] === Marking.CROSSING) {
+                this.grid[x][y] = Marking.EMPTY;
+            }
+            this.checkWin();
+            return;
+        }
         if (this.grid[x][y] === Marking.EMPTY && marking) {
             this.progress.cellsMarked++;
             this.grid[x][y] = Marking.MARKING;
         } else if (this.grid[x][y] === Marking.EMPTY && !marking) {
             this.grid[x][y] = Marking.CROSSING;
         }
+        this.checkFinishedLines();
         this.checkWin();
     }
     checkWin() {
@@ -156,5 +178,46 @@ export class Nonogram {
         }
 
         this.progress.isWon = true;
+    }
+    checkFinishedLines() {
+        function checkEqualArray(array1: number[], array2: number[]) {
+            if (array1.length !== array2.length) {
+                return false;
+            }
+
+            for (let i = 0; i < array1.length; i++) {
+                if (array1[i] !== array2[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function countGroups(arr: number[]) {
+            const result = [];
+            let count = 0;
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] === 1) {
+                    count++;
+                }
+                if (arr[i] !== 1 || i === arr.length - 1) {
+                    if (count > 0) {
+                        result.push(count);
+                        count = 0;
+                    }
+                }
+            }
+            return result.filter((group) => group !== 0);
+        }
+
+        for (let rowIndex = 0; rowIndex < this.size; rowIndex++) {
+            const result = checkEqualArray(countGroups(this.grid[rowIndex]), this.hints.rows[rowIndex]);
+            this.finishedLines.rows[rowIndex] = result;
+        }
+        for (let columnIndex = 0; columnIndex < this.size; columnIndex++) {
+            const result = checkEqualArray(countGroups(this.grid.map((row) => row[columnIndex])), this.hints.columns[columnIndex]);
+            this.finishedLines.columns[columnIndex] = result;
+        }
     }
 }

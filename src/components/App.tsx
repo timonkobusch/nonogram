@@ -17,6 +17,7 @@ const App = () => {
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(true);
+    const [clearMode, setClearMode] = useState(false);
     const { seconds, resetTimer, startTimer, pauseTimer } = useTimer();
     const [gameRunning, setgameRunning] = useState(false);
 
@@ -63,7 +64,11 @@ const App = () => {
         setMouseDown(true);
         setClickCoords({ row: y, column: x });
         setMarkLock(MarkLock.UNSET);
-
+        if (nonogram.grid[x][y] === 0) {
+            setClearMode(false);
+        } else {
+            setClearMode(true);
+        }
         if (updatedGrid.progress.isWon) {
             pauseTimer();
         }
@@ -88,7 +93,7 @@ const App = () => {
             }
 
             const updatedGrid = new Nonogram(nonogram as Nonogram);
-            updatedGrid.setCell(x, y, marking);
+            updatedGrid.setCell(x, y, marking, clearMode);
             setNonogram(updatedGrid);
             if (updatedGrid.progress.isWon) {
                 pauseTimer();
@@ -102,6 +107,7 @@ const App = () => {
         setMarking(true);
         resetTimer();
     };
+
     const handleReset = () => {
         const newNonogram = new Nonogram(nonogram);
         newNonogram.reset();

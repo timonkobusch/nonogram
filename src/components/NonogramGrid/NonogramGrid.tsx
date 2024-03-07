@@ -19,7 +19,11 @@ const TopHints = ({ nonogram, gameRunning }: { nonogram: Nonogram; gameRunning: 
                             {!gameRunning || nonogram.progress.isWon || nonogram.hints.columns[i].length === 0 ? (
                                 <div></div>
                             ) : (
-                                nonogram.hints.columns[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
+                                nonogram.hints.columns[i].map((hint: number, index: number) => (
+                                    <div key={index} className={nonogram.finishedLines.columns[i] ? 'solved' : 'number'}>
+                                        {hint}
+                                    </div>
+                                ))
                             )}
                         </th>
                     );
@@ -38,7 +42,11 @@ const LeftHints = ({ nonogram, gameRunning }: { nonogram: Nonogram; gameRunning:
                         {!gameRunning || nonogram.progress.isWon || nonogram.hints.rows[i].length === 0 ? (
                             <div></div>
                         ) : (
-                            nonogram.hints.rows[i].map((hint: number, index: number) => <div key={index}>{hint}</div>)
+                            nonogram.hints.rows[i].map((hint: number, index: number) => (
+                                <div key={index} className={nonogram.finishedLines.rows[i] ? 'solved' : 'number'}>
+                                    {hint}
+                                </div>
+                            ))
                         )}
                     </div>
                 );
