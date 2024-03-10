@@ -36,6 +36,7 @@ To get started with development, follow these steps:
 -   `npm run build`: Builds the project and outputs to the folder `./dist`.
 -   `npm run preview`: Starts a local web server that serves the built solution from `./dist` for preview.
 -   `npm run lint`: Runs the linter to check for code quality and style issues.
+-   `npm run test`: Tests the nonogram and nonogramHumanSolver modules.
 
 ## License
 
