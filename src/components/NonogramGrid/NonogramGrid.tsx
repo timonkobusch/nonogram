@@ -62,11 +62,27 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
     const onMouseLeave = () => {
         setSelectedCell({ row: -1, column: -1 });
     };
-    const [toggleTest, setToggleTest] = useState(false);
-    const sizeClass = toggleTest ? 'big' : '';
+    let sizeClass = '';
+    switch (nonogram.size) {
+        case 5:
+            sizeClass = 'grid-5x5';
+            break;
+        case 10:
+            sizeClass = 'grid-10x10';
+            break;
+        case 15:
+            sizeClass = 'grid-15x15';
+            break;
+        case 20:
+            sizeClass = 'grid-20x20';
+            break;
+        default:
+            sizeClass = 'grid-15x15';
+            break;
+    }
+
     return (
         <div className={`content ${sizeClass}`}>
-            <button onClick={() => setToggleTest(!toggleTest)}>Toggle</button>
             <LeftHints nonogram={nonogram} gameRunning={gameRunning} />
             <table>
                 <TopHints nonogram={nonogram} gameRunning={gameRunning} />
@@ -109,7 +125,7 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
                                                 onMouseEnter(row, col);
                                                 onMouseOverHandler(row, col);
                                             }}
-                                            onMouseLeave={() => onMouseLeave()}
+                                            onMouseLeave={onMouseLeave}
                                         >
                                             {row > 0 && row % 5 === 0 && <div className="fifth-row-border"></div>}
                                             {col > 0 && col % 5 === 0 && <div className="fifth-col-border"></div>}

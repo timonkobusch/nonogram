@@ -29,7 +29,6 @@ export class Nonogram {
         } else {
             this.copyNonogram(arg);
         }
-        console.log(this);
     }
 
     private static createRandomGrid(size: number) {
@@ -109,6 +108,7 @@ export class Nonogram {
             cellsMarked: 0,
             isWon: false,
         };
+        this.checkFinishedLines();
     }
 
     private checkWin(): void {

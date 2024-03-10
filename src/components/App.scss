@@ -22,20 +22,18 @@
 
 .App-content {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: row;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .App-content .ControlField {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-evenly;
     width: 260px;
     margin-right: 40px;
     margin-left: 40px;
+    gap: 40px;
     .container {
         padding: 20px;
         background-color: rgb(240, 240, 240);

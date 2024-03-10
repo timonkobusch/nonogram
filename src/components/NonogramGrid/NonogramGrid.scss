@@ -1,13 +1,3 @@
-$cell-size: 45px;
-$border-size: 1px;
-
-$hint-border-size: 2px;
-$hint-margin: 5px;
-$hint-top-size: 120px;
-$hint-gap: 3px;
-
-$content-border-size: 4px;
-
 /* Colors */
 $hint-color: #e0e0e0;
 $hint-border-color: #a5a5a5;
@@ -15,28 +5,45 @@ $hint-text-color: #344861;
 $cell-color: #344861;
 $cell-border-color: #bec4d3;
 
+/* 5x5 Puzzle */
 :root {
-    --cell-size: #{$cell-size};
-    --border-size: #{$border-size};
-    --hint-border-size: #{$hint-border-size};
-    --hint-margin: #{$hint-margin};
-    --hint-top-size: #{$hint-top-size};
-    --hint-gap: #{$hint-gap};
-    --content-border-size: #{$content-border-size};
-    --hint-color: #{$hint-color};
-    --hint-border-color: #{$hint-border-color};
-    --hint-text-color: #{$hint-text-color};
-    --cell-color: #{$cell-color};
-    --cell-border-color: #{$cell-border-color};
+    --cell-size: 60px;
+    --border-size: 1px;
+    --hint-margin: 5px;
+    --hint-box-length: 70px;
+    --hint-gap: 15px;
+    --content-border-size: 3px;
 }
-.big {
-    --cell-size: 60px !important;
+.grid-5x5 {
+    --cell-size: 60px;
+    --border-size: 1px;
+    --hint-margin: 5px;
+    --hint-box-length: 70px;
+    --hint-gap: 15px;
+    --content-border-size: 3px;
+}
+.grid-10x10 {
+    --cell-size: 45px;
+    --hint-gap: 5px;
+    --hint-box-length: 100px;
+    --content-border-size: 5px;
+}
+.grid-15x15 {
+    --cell-size: 30px;
+    --hint-gap: 2px;
+    --hint-box-length: 120px;
+    --content-border-size: 2px;
+}
+.grid-20x20 {
+    --cell-size: 30px;
+    --hint-gap: 2px;
+    --hint-box-length: 140px;
+    --content-border-size: 2px;
 }
 .content {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-bottom: 50px;
 }
 
 table {
@@ -47,21 +54,21 @@ table {
 }
 .top-hints {
     display: flex;
-    margin-bottom: $hint-margin;
-    margin-left: + $content-border-size;
+    margin-bottom: var(--hint-margin);
+    margin-left: var(--content-border-size);
     background-color: #ffffff;
     th {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
         border-spacing: 0;
-        width: calc(var(--cell-size) - $border-size - $hint-border-size * 2 - $hint-gap);
-        height: $hint-top-size;
-        margin-left: calc(($border-size + $hint-gap) / 2);
-        margin-right: calc(($border-size + $hint-gap) / 2);
+        width: calc(var(--cell-size) - var(--border-size) - var(--border-size) * 2 - var(--hint-gap));
+        height: var(--hint-box-length);
+        margin-left: calc((var(--border-size) + var(--hint-gap)) / 2);
+        margin-right: calc((var(--border-size) + var(--hint-gap)) / 2);
         padding: 0;
         background-color: $hint-color;
-        border: $hint-border-size solid $hint-border-color;
+        border: var(--border-size) solid $hint-border-color;
         border-radius: 5px;
         font-size: 15px;
         font-weight: 600;
@@ -84,8 +91,8 @@ table {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-top: $hint-top-size + $hint-border-size * 2 + $content-border-size + $hint-margin;
-    margin-right: $hint-margin;
+    margin-top: calc(var(--hint-box-length) + var(--border-size) * 2 + var(--content-border-size) + var(--hint-margin));
+    margin-right: var(--hint-margin);
     padding: 0;
     background-color: white;
 
@@ -93,22 +100,25 @@ table {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        height: $cell-size - $border-size - $hint-border-size * 2 - $hint-gap;
-        width: $hint-top-size;
-        margin-top: calc(($border-size + $hint-gap) / 2);
-        margin-bottom: calc(($border-size + $hint-gap) / 2);
+        height: calc(var(--cell-size) - var(--border-size) - var(--border-size) * 2 - var(--hint-gap));
+        width: var(--hint-box-length);
+        margin-top: calc((var(--border-size) + var(--hint-gap)) / 2);
+        margin-bottom: calc((var(--border-size) + var(--hint-gap)) / 2);
         background-color: $hint-color;
-        border: $hint-border-size solid $hint-border-color;
+        border: var(--border-size) solid $hint-border-color;
         border-radius: 5px;
         text-align: center;
+
+        gap: 7px;
+        padding-right: 5px;
         div {
             margin: 0;
             padding: 0;
-            padding-right: 5px;
             width: min-content;
             border: none;
             font-size: 15px;
             font-weight: 600;
+            text-align: center;
         }
         .number {
             color: $hint-text-color;
@@ -129,15 +139,15 @@ table {
     justify-content: flex-start;
     align-items: flex-start;
     position: relative;
-    width: $cell-size;
-    height: $cell-size;
+    width: var(--cell-size);
+    height: var(--cell-size);
     padding: 0;
     background-color: $cell-border-color;
     cursor: pointer;
     font-size: 20px;
     div#cell {
-        width: calc($cell-size - $border-size);
-        height: calc($cell-size - $border-size);
+        width: calc(var(--cell-size) - var(--border-size));
+        height: calc(var(--cell-size) - var(--border-size));
         border-radius: 3px;
         margin: 0;
     }
@@ -164,9 +174,9 @@ table {
             position: absolute;
             z-index: 1;
             background-color: gray;
-            height: $border-size + 3px;
+            height: calc(var(--border-size) + 3px);
             border-radius: 10px;
-            top: calc($cell-size / 2 - ($border-size + 3px));
+            top: calc(var(--cell-size) / 2 - (var(--border-size) + (var(--border-size) + 3px) / 2));
             left: 0;
             width: 100%;
         }
@@ -198,8 +208,8 @@ table {
 tbody {
     border-collapse: collapse;
     padding: relative;
-    border-top: $content-border-size solid $cell-color;
-    border-left: $content-border-size solid $cell-color;
+    border-top: var(--content-border-size) solid $cell-color;
+    border-left: var(--content-border-size) solid $cell-color;
 }
 
 .fifth-row-border,
@@ -219,28 +229,30 @@ tbody {
 }
 
 .fifth-row-border {
-    top: -$border-size;
+    position: absolute;
+    top: calc(-1 * var(--border-size));
     left: 0;
     right: 0;
-    height: $border-size;
+    height: calc(var(--border-size));
 }
 .fifth-col-border {
+    position: absolute;
     top: 0;
     bottom: 0;
-    left: -$border-size;
-    width: $border-size;
+    left: calc(-1 * var(--border-size));
+    width: var(--border-size);
 }
 /* bottom border */
 .table::after {
-    bottom: -2px;
+    bottom: calc(-1 * (var(--content-border-size) - var(--border-size)));
     left: 0;
-    right: -2px;
-    height: $content-border-size;
+    right: calc(-1 * (var(--content-border-size) - var(--border-size)));
+    height: var(--content-border-size);
 }
 /* right border */
 .table::before {
-    top: $hint-margin + $hint-top-size + $hint-border-size * 2;
-    bottom: -2px;
-    right: -2px;
-    width: $content-border-size;
+    top: calc(var(--hint-margin) + var(--hint-box-length) + var(--border-size) * 2);
+    bottom: 0px;
+    right: calc(-1 * (var(--content-border-size) - var(--border-size)));
+    width: var(--content-border-size);
 }

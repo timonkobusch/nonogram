@@ -44,7 +44,7 @@ export default class NonogramHumanSolver {
         });
     }
 
-    private checkNoSpaceAndSetCrossing() {
+    private checkNoSpaceAndSetCrossing(): void {
         const { size, grid, hints, solvedColumns, solvedRows } = this;
         // check all rows
         for (let rowIndex = 0; rowIndex < size; rowIndex++) {
@@ -147,7 +147,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    private checkCompletedLines() {
+    private checkCompletedLines(): void {
         const { size, grid, solvedColumns, solvedRows, hints } = this;
 
         for (let rowIndex = 0; rowIndex < size; rowIndex++) {
@@ -190,7 +190,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    private checkSpreading() {
+    private checkSpreading(): void {
         const { size, hints, grid, solvedRows, solvedColumns } = this;
         // spread rows
 
@@ -301,7 +301,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    private checkOverlapping() {
+    private checkOverlapping(): void {
         function generatePossibleLines(hints: number[], size: number) {
             const possibleRows: number[][] = [];
 
