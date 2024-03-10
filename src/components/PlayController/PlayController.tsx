@@ -1,7 +1,7 @@
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { IoIosUndo } from 'react-icons/io';
 import './PlayController.scss';
-import { MdOutlineSquare, MdClose } from 'react-icons/md';
+import { MdSquare, MdClose } from 'react-icons/md';
 interface IPlayControllerProps {
     progress: {
         isWon: boolean;
@@ -36,27 +36,26 @@ const PlayController = ({ progress, seconds, handleUndo, handlePause, undoActive
             <div className="progressContainer">
                 <progress value={cellsMarked} max={cellsToBeMarked}></progress>
                 <div>
-                    <span className={cellsMarked > cellsToBeMarked ? 'warning' : ' '}>{cellsMarked}</span> /{cellsToBeMarked}{' '}
+                    <span className={cellsMarked > cellsToBeMarked ? 'warning' : ' '}>{cellsMarked}</span> / {cellsToBeMarked}{' '}
                     {isWon ? 'won' : 'marked'}
                 </div>
             </div>
-            <div className="undoContainer">
+            <div className="controlContainer">
                 <button className="undoButton" onClick={handleUndo} disabled={!undoActive || isWon}>
                     <IoIosUndo />
                     undo
                 </button>
                 <div className="toggle-container" onClick={toggleMarking}>
-                    <span className={`toggle-text on-text ${marking ? 'active' : ''}`}>Fill</span>
                     <div className={`slider ${marking ? 'active' : ''}`}>
                         <div className={`icon ${!marking ? 'icon-inactive' : ''}`}>
-                            <MdOutlineSquare />
+                            <MdSquare />
                         </div>
                         <div className={`icon ${marking ? 'icon-inactive' : ''}`}>
                             <MdClose />
                         </div>
                     </div>
-                    <span className={`toggle-text off-text ${!marking ? 'active' : ''}`}>Cross</span>
                 </div>
+                <div className="text">'F' to toggle</div>
             </div>
         </div>
     );

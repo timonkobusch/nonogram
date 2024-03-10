@@ -15,6 +15,23 @@ $hint-text-color: #344861;
 $cell-color: #344861;
 $cell-border-color: #bec4d3;
 
+:root {
+    --cell-size: #{$cell-size};
+    --border-size: #{$border-size};
+    --hint-border-size: #{$hint-border-size};
+    --hint-margin: #{$hint-margin};
+    --hint-top-size: #{$hint-top-size};
+    --hint-gap: #{$hint-gap};
+    --content-border-size: #{$content-border-size};
+    --hint-color: #{$hint-color};
+    --hint-border-color: #{$hint-border-color};
+    --hint-text-color: #{$hint-text-color};
+    --cell-color: #{$cell-color};
+    --cell-border-color: #{$cell-border-color};
+}
+.big {
+    --cell-size: 60px !important;
+}
 .content {
     display: flex;
     justify-content: center;
@@ -38,7 +55,7 @@ table {
         flex-direction: column;
         justify-content: flex-end;
         border-spacing: 0;
-        width: $cell-size - $border-size - $hint-border-size * 2 - $hint-gap;
+        width: calc(var(--cell-size) - $border-size - $hint-border-size * 2 - $hint-gap);
         height: $hint-top-size;
         margin-left: calc(($border-size + $hint-gap) / 2);
         margin-right: calc(($border-size + $hint-gap) / 2);

@@ -21,17 +21,19 @@
         color: red;
     }
 }
-.playController .undoContainer {
+.playController .controlContainer {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
-
+.playController .text {
+    width: min-content;
+}
 /* ToggleSwitch */
 .toggle-container {
     display: inline-flex;
     position: relative;
-    width: 100px; // Adjust width as needed
+    width: 74px; // Adjust width as needed
     height: 40px; // Adjust height as needed
     background-color: rgb(200, 200, 200);
     border-radius: 30px;
@@ -52,7 +54,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px; // Slider width
+        width: 34px; // Slider width
         height: 34px; // Slider height, smaller than container for border
         z-index: 2;
 
@@ -90,6 +92,6 @@
     }
 
     .slider.active {
-        left: calc(100% - 44px); // Adjust so the slider moves to the end, accounting for its width
+        left: calc(100% - 38px); // Adjust so the slider moves to the end, accounting for its width
     }
 }

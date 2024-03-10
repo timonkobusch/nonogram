@@ -27,13 +27,7 @@ export default class NonogramHumanSolver {
             this.checkNoSpaceCrossing();
             this.checkCompletedLines();
         }
-        if (this.checkCorrectness()) {
-            console.log('Solved');
-            return true;
-        } else {
-            console.log('Not solved');
-        }
-        return false;
+        return this.checkCorrectness();
     }
 
     checkCorrectness() {

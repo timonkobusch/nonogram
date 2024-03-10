@@ -7,16 +7,20 @@ import PlayController from 'components/PlayController/PlayController';
 import useTimer from 'components/utils/useTimer';
 import AppHeader from 'components/AppHeader/AppHeader';
 import About from 'components/About/About';
+import workerURL from './utils/createClassWorker?worker&url';
+
 const enum MarkLock {
     UNSET = 0,
     ROW = 1,
     COL = 2,
 }
+
 const App = () => {
     const [nonogram, setNonogram] = useState(() => new Nonogram(10));
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [clearMode, setClearMode] = useState(false);
     const { seconds, resetTimer, startTimer, pauseTimer } = useTimer();
     const [gameRunning, setgameRunning] = useState(false);
@@ -101,11 +105,29 @@ const App = () => {
         }
     };
     const handleGenerate = (size: number) => {
-        setNonogram(new Nonogram(size));
-        setgameRunning(false);
+        if (size <= 25) {
+            setNonogram(new Nonogram(size));
+            resetTimer();
+            setMarking(true);
+            setgameRunning(true);
+            return;
+        }
+        setLoading(true);
+        const tempNonogram = new Nonogram(10);
+        tempNonogram.forceWin();
+        setNonogram(tempNonogram);
 
-        setMarking(true);
-        resetTimer();
+        const worker = new Worker(workerURL, { type: 'module' });
+
+        worker.onmessage = (e) => {
+            setNonogram(e.data);
+            resetTimer();
+            setMarking(true);
+            setgameRunning(true);
+            worker.terminate();
+            setLoading(false);
+        };
+        worker.postMessage(size);
     };
 
     const handleReset = () => {
@@ -127,7 +149,7 @@ const App = () => {
             <AppHeader />
             <div className="App-content">
                 <div className="ControlField">
-                    <GameController handleGenerate={handleGenerate} handleReset={handleReset} progress={nonogram.progress} />
+                    <GameController handleGenerate={handleGenerate} handleReset={handleReset} progress={nonogram.progress} loading={loading} />
                     <PlayController
                         progress={nonogram.progress}
                         seconds={seconds}

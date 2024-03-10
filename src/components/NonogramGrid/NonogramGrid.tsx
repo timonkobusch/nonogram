@@ -62,9 +62,11 @@ const NonogramGrid = ({ nonogram, onMouseDownHandler, onMouseOverHandler, gameRu
     const onMouseLeave = () => {
         setSelectedCell({ row: -1, column: -1 });
     };
-
+    const [toggleTest, setToggleTest] = useState(false);
+    const sizeClass = toggleTest ? 'big' : '';
     return (
-        <div className="content">
+        <div className={`content ${sizeClass}`}>
+            <button onClick={() => setToggleTest(!toggleTest)}>Toggle</button>
             <LeftHints nonogram={nonogram} gameRunning={gameRunning} />
             <table>
                 <TopHints nonogram={nonogram} gameRunning={gameRunning} />

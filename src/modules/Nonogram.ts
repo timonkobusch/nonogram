@@ -1,4 +1,4 @@
-import NonogramHumanSolver from 'modules/NonogramHumanSolver';
+import NonogramHumanSolver from './NonogramHumanSolver';
 
 export enum Marking {
     MARKING = 1,
@@ -80,12 +80,10 @@ export class Nonogram {
         if (typeof arg === 'number') {
             this.size = arg as number;
             this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => Marking.EMPTY));
-            console.log('creating random grid and trying to solve it...');
             this.solution = createRandomGrid(this.size);
             this.hints = createHints(this.solution);
             let solver = new NonogramHumanSolver(this.size, this.hints, this.solution);
             while (!solver.solve()) {
-                console.log('trying again...');
                 this.solution = createRandomGrid(this.size);
                 this.hints = createHints(this.solution);
                 solver = new NonogramHumanSolver(this.size, this.hints, this.solution);
@@ -219,5 +217,8 @@ export class Nonogram {
             const result = checkEqualArray(countGroups(this.grid.map((row) => row[columnIndex])), this.hints.columns[columnIndex]);
             this.finishedLines.columns[columnIndex] = result;
         }
+    }
+    forceWin() {
+        this.progress.isWon = true;
     }
 }

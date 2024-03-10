@@ -8,9 +8,15 @@
     align-items: center;
     gap: 5px;
     width: 200px;
+    z-index: 2;
 }
-.gameController .challengesContainer {
+.gameController .experimentalContainer {
     font-style: italic;
+    p {
+        font-style: normal;
+        color: rgb(255, 57, 57);
+        margin: 5px;
+    }
 }
 .gameController .buttonContainer {
     display: flex;

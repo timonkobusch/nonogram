@@ -7,7 +7,7 @@
         "skipLibCheck": true,
 
         /* Imoprts */
-        "baseUrl": "./src",
+        "baseUrl": "./src/",
 
         /* Bundler mode */
         "moduleResolution": "bundler",
