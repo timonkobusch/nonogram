@@ -5,7 +5,7 @@ const useTimer = () => {
     const [active, setActive] = useState(false);
 
     useEffect(() => {
-        let interval: number | undefined = undefined;
+        let interval: NodeJS.Timeout | undefined = undefined;
         if (active) {
             interval = setInterval(() => {
                 setSeconds((prevSeconds) => prevSeconds + 1);
