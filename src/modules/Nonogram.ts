@@ -29,13 +29,14 @@ export class Nonogram {
         } else {
             this.copyNonogram(arg);
         }
+        console.log(this);
     }
 
     private static createRandomGrid(size: number) {
         const grid = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
-                Math.random() > 0.3 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.EMPTY);
+                Math.random() > 0.3 ? (grid[i][j] = Marking.MARKING) : (grid[i][j] = Marking.CROSSING);
             }
         }
 
@@ -74,6 +75,7 @@ export class Nonogram {
             this.solution = Nonogram.createRandomGrid(this.size);
             this.hints = Nonogram.createHints(this.solution);
             solver = new NonogramHumanSolver(this.size, this.hints, this.solution);
+            break;
         }
 
         this.progress = {
@@ -113,17 +115,9 @@ export class Nonogram {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 if (this.grid[i][j] !== this.solution[i][j]) {
-                    if (this.grid[i][j] === Marking.CROSSING && this.solution[i][j] === Marking.EMPTY) continue;
+                    if (this.grid[i][j] === Marking.EMPTY && this.solution[i][j] === Marking.CROSSING) continue;
                     this.progress.isWon = false;
                     return;
-                }
-            }
-        }
-
-        for (let i = 0; i < this.size; i++) {
-            for (let j = 0; j < this.size; j++) {
-                if (this.grid[i][j] === Marking.EMPTY) {
-                    this.grid[i][j] = Marking.CROSSING;
                 }
             }
         }

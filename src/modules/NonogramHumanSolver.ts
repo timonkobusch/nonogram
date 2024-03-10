@@ -1,50 +1,50 @@
 export default class NonogramHumanSolver {
-    readonly size;
-    readonly hints;
-    readonly solution;
+    private readonly size: number;
+    private readonly hints: { rows: number[][]; columns: number[][] };
+    private readonly solution: number[][];
 
-    grid;
-    progress;
-    solvedColumns;
-    solvedRows;
+    private grid!: number[][];
+    private progress!: boolean;
+    private solvedColumns!: boolean[];
+    private solvedRows!: boolean[];
 
     constructor(size: number, hints: { rows: number[][]; columns: number[][] }, solution: number[][]) {
         this.size = size;
         this.hints = hints;
         this.solution = solution;
 
-        this.grid = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
-        this.progress = true;
-        this.solvedColumns = new Array(size).fill(false);
-        this.solvedRows = new Array(size).fill(false);
+        this.initialize();
     }
 
-    solve() {
+    private initialize(): void {
+        this.grid = Array.from({ length: this.size }, () => Array.from({ length: this.size }, () => 0));
+        this.progress = true;
+        this.solvedColumns = Array(this.size).fill(false);
+        this.solvedRows = Array(this.size).fill(false);
+    }
+
+    public solve(): boolean {
         while (this.progress) {
             this.progress = false;
             this.checkOverlapping();
             this.checkSpreading();
-            this.checkNoSpaceCrossing();
+            this.checkNoSpaceAndSetCrossing();
             this.checkCompletedLines();
         }
         return this.checkCorrectness();
     }
 
-    checkCorrectness() {
-        const { size, grid, solution } = this;
-        for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-            for (let colIndex = 0; colIndex < size; colIndex++) {
-                if (grid[rowIndex][colIndex] === 1 && (solution[rowIndex][colIndex] === 0 || solution[rowIndex][colIndex] === 2)) {
-                    return false;
-                } else if ((grid[rowIndex][colIndex] === 0 || grid[rowIndex][colIndex] === 2) && solution[rowIndex][colIndex] === 1) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    private checkCorrectness(): boolean {
+        const { grid, solution } = this;
+
+        return grid.every((row, rowIndex) => {
+            return row.every((cell, colIndex) => {
+                return cell === solution[rowIndex][colIndex];
+            });
+        });
     }
 
-    checkNoSpaceCrossing() {
+    private checkNoSpaceAndSetCrossing() {
         const { size, grid, hints, solvedColumns, solvedRows } = this;
         // check all rows
         for (let rowIndex = 0; rowIndex < size; rowIndex++) {
@@ -147,7 +147,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    checkCompletedLines() {
+    private checkCompletedLines() {
         const { size, grid, solvedColumns, solvedRows, hints } = this;
 
         for (let rowIndex = 0; rowIndex < size; rowIndex++) {
@@ -190,7 +190,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    checkSpreading() {
+    private checkSpreading() {
         const { size, hints, grid, solvedRows, solvedColumns } = this;
         // spread rows
 
@@ -301,7 +301,7 @@ export default class NonogramHumanSolver {
         }
     }
 
-    checkOverlapping() {
+    private checkOverlapping() {
         function generatePossibleLines(hints: number[], size: number) {
             const possibleRows: number[][] = [];
 

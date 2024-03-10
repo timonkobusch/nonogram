@@ -109,7 +109,7 @@ const App = () => {
             setNonogram(new Nonogram(size));
             resetTimer();
             setMarking(true);
-            setgameRunning(true);
+            setgameRunning(false);
             return;
         }
         setLoading(true);
@@ -123,7 +123,7 @@ const App = () => {
             setNonogram(e.data);
             resetTimer();
             setMarking(true);
-            setgameRunning(true);
+            setgameRunning(false);
             worker.terminate();
             setLoading(false);
         };
