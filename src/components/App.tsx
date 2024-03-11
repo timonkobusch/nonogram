@@ -135,6 +135,7 @@ const App = () => {
         newNonogram.reset();
         setNonogram(newNonogram);
     };
+
     const handlePause = () => {
         if (gameRunning) {
             pauseTimer();
@@ -159,7 +160,7 @@ const App = () => {
                     <GameController
                         handleGenerate={handleGenerate}
                         handleReset={handleReset}
-                        progress={nonogram.progress}
+                        gameWon={nonogram.progress.isWon}
                         loading={loading}
                     />
                     <PlayController

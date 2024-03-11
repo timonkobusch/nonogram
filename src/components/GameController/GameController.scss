@@ -6,8 +6,7 @@
 .gameController .generateContainer {
     display: flex;
     align-items: center;
-    gap: 5px;
-    width: 200px;
+    justify-content: space-between;
     z-index: 2;
 }
 .gameController .experimentalContainer {
@@ -18,7 +17,7 @@
         margin: 5px;
     }
 }
-.gameController .buttonContainer {
+.gameController .resetContainer {
     display: flex;
     justify-content: space-between;
     gap: 5px;

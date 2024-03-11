@@ -40,6 +40,12 @@ $cell-border-color: #bec4d3;
     --hint-box-length: 140px;
     --content-border-size: 2px;
 }
+.grid-25x25 {
+    --cell-size: 25px;
+    --hint-gap: 2px;
+    --hint-box-length: 170px;
+    --content-border-size: 2px;
+}
 .content {
     display: flex;
     justify-content: center;
@@ -57,12 +63,15 @@ table {
     margin-bottom: var(--hint-margin);
     margin-left: var(--content-border-size);
     background-color: #ffffff;
-    th {
+    div {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
         border-spacing: 0;
-        width: calc(var(--cell-size) - var(--border-size) - var(--border-size) * 2 - var(--hint-gap));
+        width: calc(
+            var(--cell-size) - var(--border-size) - var(--border-size) * 2 -
+                var(--hint-gap)
+        );
         height: var(--hint-box-length);
         margin-left: calc((var(--border-size) + var(--hint-gap)) / 2);
         margin-right: calc((var(--border-size) + var(--hint-gap)) / 2);
@@ -72,6 +81,7 @@ table {
         border-radius: 5px;
         font-size: 15px;
         font-weight: 600;
+
         div {
             margin: 0;
             height: min-content;
@@ -91,7 +101,10 @@ table {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-top: calc(var(--hint-box-length) + var(--border-size) * 2 + var(--content-border-size) + var(--hint-margin));
+    margin-top: calc(
+        var(--hint-box-length) + var(--border-size) * 2 +
+            var(--content-border-size) + var(--hint-margin)
+    );
     margin-right: var(--hint-margin);
     padding: 0;
     background-color: white;
@@ -100,7 +113,10 @@ table {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        height: calc(var(--cell-size) - var(--border-size) - var(--border-size) * 2 - var(--hint-gap));
+        height: calc(
+            var(--cell-size) - var(--border-size) - var(--border-size) * 2 -
+                var(--hint-gap)
+        );
         width: var(--hint-box-length);
         margin-top: calc((var(--border-size) + var(--hint-gap)) / 2);
         margin-bottom: calc((var(--border-size) + var(--hint-gap)) / 2);
@@ -170,13 +186,16 @@ table {
         background-color: white;
         &::before,
         &::after {
-            content: '';
+            content: "";
             position: absolute;
             z-index: 1;
             background-color: gray;
             height: calc(var(--border-size) + 3px);
             border-radius: 10px;
-            top: calc(var(--cell-size) / 2 - (var(--border-size) + (var(--border-size) + 3px) / 2));
+            top: calc(
+                var(--cell-size) / 2 -
+                    (var(--border-size) + (var(--border-size) + 3px) / 2)
+            );
             left: 0;
             width: 100%;
         }
@@ -214,18 +233,10 @@ tbody {
 
 .fifth-row-border,
 .fifth-col-border {
-    content: '';
+    content: "";
     position: absolute;
     z-index: 1;
     background-color: rgb(53, 53, 53);
-}
-
-.table::after,
-.table::before {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    background-color: $cell-color;
 }
 
 .fifth-row-border {
@@ -242,6 +253,15 @@ tbody {
     left: calc(-1 * var(--border-size));
     width: var(--border-size);
 }
+
+.table::after,
+.table::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    background-color: $cell-color;
+}
+
 /* bottom border */
 .table::after {
     bottom: calc(-1 * (var(--content-border-size) - var(--border-size)));
@@ -251,7 +271,9 @@ tbody {
 }
 /* right border */
 .table::before {
-    top: calc(var(--hint-margin) + var(--hint-box-length) + var(--border-size) * 2);
+    top: calc(
+        var(--hint-margin) + var(--hint-box-length) + var(--border-size) * 2
+    );
     bottom: 0px;
     right: calc(-1 * (var(--content-border-size) - var(--border-size)));
     width: var(--content-border-size);
