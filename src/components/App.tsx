@@ -1,13 +1,13 @@
-import 'components/App.scss';
-import NonogramGrid from './NonogramGrid/NonogramGrid';
-import { Nonogram } from 'modules/Nonogram';
-import { useEffect, useState } from 'react';
-import GameController from 'components/GameController/GameController';
-import PlayController from 'components/PlayController/PlayController';
-import useTimer from 'components/utils/useTimer';
-import AppHeader from 'components/AppHeader/AppHeader';
-import About from 'components/About/About';
-import workerURL from './utils/createClassWorker?worker&url';
+import "components/App.scss";
+import NonogramGrid from "./NonogramGrid/NonogramGrid";
+import { Nonogram } from "modules/Nonogram";
+import { useEffect, useState } from "react";
+import GameController from "components/GameController/GameController";
+import PlayController from "components/PlayController/PlayController";
+import useTimer from "components/utils/useTimer";
+import AppHeader from "components/AppHeader/AppHeader";
+import About from "components/About/About";
+import workerURL from "./utils/createClassWorker?worker&url";
 
 const enum MarkLock {
     UNSET = 0,
@@ -35,15 +35,15 @@ const App = () => {
             }
         };
         const handleFKeyPress = (e: KeyboardEvent) => {
-            if (e.key === 'f') {
+            if (e.key === "f") {
                 setMarking(!marking);
             }
         };
-        document.addEventListener('mouseup', handleMouseUp);
-        document.addEventListener('keypress', handleFKeyPress);
+        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("keypress", handleFKeyPress);
         return () => {
-            document.removeEventListener('mouseup', handleMouseUp);
-            document.removeEventListener('keypress', handleFKeyPress);
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("keypress", handleFKeyPress);
         };
     });
 
@@ -117,7 +117,7 @@ const App = () => {
         tempNonogram.forceWin();
         setNonogram(tempNonogram);
 
-        const worker = new Worker(workerURL, { type: 'module' });
+        const worker = new Worker(workerURL, { type: "module" });
 
         worker.onmessage = (e) => {
             setNonogram(e.data);
@@ -143,13 +143,25 @@ const App = () => {
         }
         setgameRunning(!gameRunning);
     };
-
+    // TODO - Loading spinner and telling puzzle tries
+    // TODO - Performance
+    // TODO - Stop timer while loading
+    // TODO - Add a win message/animation
+    // TODO - Refactor app.tsx
+    // TODO - Challenges
+    // TODO - Help
+    // TODO - define behavior for app header
     return (
         <div className="App">
             <AppHeader />
             <div className="App-content">
                 <div className="ControlField">
-                    <GameController handleGenerate={handleGenerate} handleReset={handleReset} progress={nonogram.progress} loading={loading} />
+                    <GameController
+                        handleGenerate={handleGenerate}
+                        handleReset={handleReset}
+                        progress={nonogram.progress}
+                        loading={loading}
+                    />
                     <PlayController
                         progress={nonogram.progress}
                         seconds={seconds}
