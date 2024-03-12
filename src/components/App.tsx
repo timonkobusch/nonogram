@@ -163,7 +163,6 @@ const App = () => {
     };
 
     const memoizedNonogramGrid = useMemo(() => {
-        console.log("rerender the grid");
         return (
             <NonogramGrid
                 nonogram={nonogram}
@@ -173,12 +172,10 @@ const App = () => {
             />
         );
     }, [gameRunning, handleMouseDown, handleMouseOver, nonogram]);
-    // TODO - Loading spinner and telling puzzle tries
-    // TODO - Performance
     // TODO - Add a win message/animation
     // TODO - Refactor app.tsx
-    // TODO - Challenges
     // TODO - Help
+    // TODO - records
     // TODO - define behavior for app header
     return (
         <div className="App">

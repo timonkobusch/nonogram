@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Select, { SingleValue } from "react-select";
+import { ImSpinner } from "react-icons/im";
 import "./GameController.scss";
-
 interface IGameControllerProps {
     handleGenerate: (size: number) => void;
     handleReset: () => void;
@@ -51,10 +51,7 @@ const GameController = ({
                         onChange={handleGridSizeChange}
                     />
                 </div>
-                <button
-                    onClick={() => handleGenerate(gridSize.value)}
-                    disabled={loading}
-                >
+                <button onClick={() => handleGenerate(gridSize.value)}>
                     generate
                 </button>
             </div>
@@ -74,9 +71,23 @@ const GameController = ({
                     </p>
                 )}
             </div>
-            <button className="reset" onClick={handleReset} disabled={gameWon}>
-                reset
-            </button>
+            {!loading && (
+                <button
+                    className="reset"
+                    onClick={handleReset}
+                    disabled={gameWon}
+                >
+                    reset
+                </button>
+            )}
+            {loading && (
+                <div className="container">
+                    <div className="loading">
+                        Loading{" "}
+                        <ImSpinner className="loading-spinner" size="20px" />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

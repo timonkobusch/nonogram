@@ -86,19 +86,18 @@ const NonogramGrid = ({
             <Hints
                 hintLines={nonogram.hints.rows}
                 finishedLines={nonogram.finishedLines.rows}
-                gameRunning={gameRunning && !nonogram.progress.isWon}
+                gameRunning={gameRunning}
                 classIdentifier={"left-hints"}
             />
             <table>
                 <Hints
                     hintLines={nonogram.hints.columns}
                     finishedLines={nonogram.finishedLines.columns}
-                    gameRunning={gameRunning && !nonogram.progress.isWon}
+                    gameRunning={gameRunning}
                     classIdentifier={"top-hints"}
                 />
                 <tbody className="table">
                     {Array.from({ length: nonogram.size }).map((_, row) => {
-
                         return (
                             <tr key={row} className="row">
                                 {Array.from({ length: nonogram.size }).map(

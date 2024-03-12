@@ -37,7 +37,7 @@ $cell-border-color: #bec4d3;
 .grid-20x20 {
     --cell-size: 30px;
     --hint-gap: 2px;
-    --hint-box-length: 140px;
+    --hint-box-length: 160px;
     --content-border-size: 2px;
 }
 .grid-25x25 {
@@ -61,7 +61,7 @@ table {
 .top-hints {
     display: flex;
     margin-bottom: var(--hint-margin);
-    margin-left: var(--content-border-size);
+    margin-left: calc(var(--content-border-size) - 1px);
     background-color: #ffffff;
     div {
         display: flex;
@@ -178,6 +178,7 @@ table {
     }
     .colored {
         background-color: $cell-color;
+        animation: flip 0.1s forwards;
     }
     .colored.game-won {
         background-color: rgb(33, 163, 61);
@@ -201,8 +202,26 @@ table {
         }
         &::before {
             transform: rotate(-45deg); /* Rotate the pseudo-element */
+            animation: rotate-before 0.2s;
         }
         &::after {
+            transform: rotate(45deg);
+            animation: rotate-after 0.2s;
+        }
+    }
+    @keyframes rotate-before {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(-45deg);
+        }
+    }
+    @keyframes rotate-after {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
             transform: rotate(45deg);
         }
     }
@@ -223,6 +242,25 @@ table {
         display: none;
     }
 }
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+        opacity: 0;
+    }
+    50% {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+    51% {
+        transform: rotateY(90deg);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateY(180deg);
+        opacity: 1;
+    }
+}
+
 /* Borders styles */
 tbody {
     border-collapse: collapse;
