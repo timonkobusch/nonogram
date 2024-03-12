@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const useTimer = () => {
     const [seconds, setSeconds] = useState(0);
@@ -23,9 +23,13 @@ const useTimer = () => {
         setActive(false);
         setSeconds(startAt || 0);
     };
-    const pauseTimer = () => {
-        setActive(false);
-    };
+
+    const pauseTimer = useMemo(() => {
+        return () => {
+            setActive(false);
+        };
+    }, [])
+
     const startTimer = () => {
         setActive(true);
     };

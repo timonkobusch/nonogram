@@ -98,6 +98,7 @@ const NonogramGrid = ({
                 />
                 <tbody className="table">
                     {Array.from({ length: nonogram.size }).map((_, row) => {
+
                         return (
                             <tr key={row} className="row">
                                 {Array.from({ length: nonogram.size }).map(
