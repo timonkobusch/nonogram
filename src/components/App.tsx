@@ -15,7 +15,7 @@ const enum MarkLock {
     COL = 2,
 }
 
-const initialNonogramState = new Nonogram(10)
+const initialNonogramState = new Nonogram(10);
 
 const App = () => {
     const [nonogram, setNonogram] = useState(initialNonogramState);
@@ -62,11 +62,11 @@ const App = () => {
     const handleMouseDown = useMemo(() => {
         return (x: number, y: number) => {
             setNonogramHistory([...nonogramHistory, new Nonogram(nonogram)]);
-    
+
             const updatedGrid = new Nonogram(nonogram);
             updatedGrid.click(x, y, marking);
             setNonogram(updatedGrid);
-    
+
             // Set mouse state
             setMouseDown(true);
             setClickCoords({ row: y, column: x });
@@ -80,7 +80,7 @@ const App = () => {
                 pauseTimer();
             }
         };
-    }, [nonogram, marking, nonogramHistory, pauseTimer])
+    }, [nonogram, marking, nonogramHistory, pauseTimer]);
 
     const handleMouseOver = useMemo(() => {
         return (x: number, y: number) => {
@@ -100,7 +100,7 @@ const App = () => {
                 } else if (markLock === MarkLock.ROW) {
                     y = clickCoords.row;
                 }
-    
+
                 const updatedGrid = new Nonogram(nonogram as Nonogram);
                 updatedGrid.setCell(x, y, marking, clearMode);
                 setNonogram(updatedGrid);
@@ -109,7 +109,16 @@ const App = () => {
                 }
             }
         };
-    }, [clearMode, clickCoords.column, clickCoords.row, markLock, nonogram, mouseDown, marking, pauseTimer])
+    }, [
+        clearMode,
+        clickCoords.column,
+        clickCoords.row,
+        markLock,
+        nonogram,
+        mouseDown,
+        marking,
+        pauseTimer,
+    ]);
 
     const handleGenerate = (size: number) => {
         if (size <= 25) {
@@ -120,6 +129,7 @@ const App = () => {
             return;
         }
         setLoading(true);
+        resetTimer();
         const tempNonogram = new Nonogram(10);
         tempNonogram.forceWin();
         setNonogram(tempNonogram);
@@ -153,7 +163,7 @@ const App = () => {
     };
 
     const memoizedNonogramGrid = useMemo(() => {
-        console.log("rerender the grid")
+        console.log("rerender the grid");
         return (
             <NonogramGrid
                 nonogram={nonogram}
@@ -161,11 +171,10 @@ const App = () => {
                 onMouseOverHandler={handleMouseOver}
                 gameRunning={gameRunning}
             />
-        )
-    }, [gameRunning, handleMouseDown, handleMouseOver, nonogram])
+        );
+    }, [gameRunning, handleMouseDown, handleMouseOver, nonogram]);
     // TODO - Loading spinner and telling puzzle tries
     // TODO - Performance
-    // TODO - Stop timer while loading
     // TODO - Add a win message/animation
     // TODO - Refactor app.tsx
     // TODO - Challenges
