@@ -172,8 +172,6 @@ const App = () => {
             />
         );
     }, [gameRunning, handleMouseDown, handleMouseOver, nonogram]);
-    // TODO - Add a win message/animation
-    // TODO - Refactor app.tsx
     // TODO - Help
     // TODO - records
     // TODO - define behavior for app header

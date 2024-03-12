@@ -100,7 +100,6 @@ table {
 .left-hints {
     display: flex;
     flex-direction: column;
-    height: 100%;
     margin-top: calc(
         var(--hint-box-length) + var(--border-size) * 2 +
             var(--content-border-size) + var(--hint-margin)

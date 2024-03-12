@@ -20,7 +20,7 @@ const Hints = ({
             {hintLines.map((hintLine, i) => {
                 return (
                     <div key={i}>
-                        {!gameRunning || finishedLines[i] ? (
+                        {!gameRunning ? (
                             <div></div>
                         ) : (
                             hintLine.map((hint, index) => (
@@ -40,6 +40,7 @@ const Hints = ({
         </div>
     );
 };
+
 interface INonogramGridProps {
     nonogram: Nonogram;
     onMouseDownHandler: (x: number, y: number) => void;
@@ -122,12 +123,6 @@ const NonogramGrid = ({
                                                 break;
                                             case 2:
                                                 colored = "crossed";
-                                                break;
-                                            case 3:
-                                                colored = "wrongColored";
-                                                break;
-                                            case 4:
-                                                colored = "wrongCrossed";
                                                 break;
                                         }
                                         return (
