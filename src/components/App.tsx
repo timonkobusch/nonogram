@@ -8,7 +8,7 @@ import useTimer from "components/utils/useTimer";
 import AppHeader from "components/AppHeader/AppHeader";
 import About from "components/About/About";
 import workerURL from "./utils/createClassWorker?worker&url";
-
+import { insertRecord } from "components/utils/recordHandler";
 const enum MarkLock {
     UNSET = 0,
     ROW = 1,
@@ -78,9 +78,11 @@ const App = () => {
             }
             if (updatedGrid.progress.isWon) {
                 pauseTimer();
+
+                insertRecord(`${nonogram.size}x${nonogram.size}`, seconds);
             }
         };
-    }, [nonogram, marking, nonogramHistory, pauseTimer]);
+    }, [nonogram, marking, nonogramHistory, pauseTimer, seconds]);
 
     const handleMouseOver = useMemo(() => {
         return (x: number, y: number) => {
@@ -106,6 +108,8 @@ const App = () => {
                 setNonogram(updatedGrid);
                 if (updatedGrid.progress.isWon) {
                     pauseTimer();
+                    console.log("You won!");
+                    insertRecord(`${nonogram.size}x${nonogram.size}`, seconds);
                 }
             }
         };
@@ -118,6 +122,7 @@ const App = () => {
         mouseDown,
         marking,
         pauseTimer,
+        seconds,
     ]);
 
     const handleGenerate = (size: number) => {
@@ -175,6 +180,7 @@ const App = () => {
     // TODO - Help
     // TODO - records
     // TODO - define behavior for app header
+    // FIXME - show Records
     return (
         <div className="App">
             <AppHeader />
