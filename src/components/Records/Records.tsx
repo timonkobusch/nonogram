@@ -24,8 +24,14 @@ const Records = ({ handleAbort }: { handleAbort: () => void }) => {
                         <p>No records yet</p>
                     ) : (
                         records.map((record, index) => (
-                            <p key={index}>
-                                {record.grid} - {record.time} seconds
+                            <p key={index} className="recordItem">
+                                <span>{record.grid}</span>
+                                <span>
+                                    {Math.round(record.time / 60)}:
+                                    {(record.time % 60)
+                                        .toString()
+                                        .padStart(2, "0")}
+                                </span>
                             </p>
                         ))
                     )}

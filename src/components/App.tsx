@@ -177,8 +177,6 @@ const App = () => {
             />
         );
     }, [gameRunning, handleMouseDown, handleMouseOver, nonogram]);
-    // TODO - Help
-    // TODO - records
     // TODO - define behavior for app header
     // FIXME - show Records
     return (
