@@ -19,6 +19,7 @@ const initialNonogramState = new Nonogram(10);
 
 const App = () => {
     const [nonogram, setNonogram] = useState(initialNonogramState);
+
     const [nonogramHistory, setNonogramHistory] = useState<Nonogram[]>([]);
     const [mouseDown, setMouseDown] = useState(false);
     const [marking, setMarking] = useState(true);
@@ -26,7 +27,6 @@ const App = () => {
     const [clearMode, setClearMode] = useState(false);
     const { seconds, resetTimer, startTimer, pauseTimer } = useTimer();
     const [gameRunning, setgameRunning] = useState(false);
-
     const [clickCoords, setClickCoords] = useState({ row: 0, column: 0 });
     const [markLock, setMarkLock] = useState(MarkLock.UNSET);
 
@@ -126,6 +126,7 @@ const App = () => {
     ]);
 
     const handleGenerate = (size: number) => {
+        setNonogramHistory([]);
         if (size <= 25) {
             setNonogram(new Nonogram(size));
             resetTimer();
@@ -177,8 +178,9 @@ const App = () => {
             />
         );
     }, [gameRunning, handleMouseDown, handleMouseOver, nonogram]);
-    // TODO - define behavior for app header
-    // FIXME - show Records
+    // TODO - Hide single hints when solved
+    // TODO - Move handlers to own file
+    // TODO - Rewrite NonogramGrid
     return (
         <div className="App">
             <AppHeader />
@@ -189,6 +191,7 @@ const App = () => {
                         handleReset={handleReset}
                         gameWon={nonogram.progress.isWon}
                         loading={loading}
+                        gameRunning={gameRunning}
                     />
                     <PlayController
                         progress={nonogram.progress}

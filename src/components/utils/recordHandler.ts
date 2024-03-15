@@ -15,9 +15,14 @@ export const insertRecord = (grid: string, time: number): boolean => {
 };
 // load array of records from local storage
 export const loadRecords = (): { grid: string; time: number }[] => {
-    const records = localStorage.getItem("records");
+    const records: string | null = localStorage.getItem("records");
     if (records) {
-        return JSON.parse(records);
+        return JSON.parse(records).sort(
+            (
+                a: { grid: string; time: number },
+                b: { grid: string; time: number }
+            ) => a.time - b.time
+        );
     }
     return [];
 };

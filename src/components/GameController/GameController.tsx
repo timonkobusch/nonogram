@@ -7,12 +7,14 @@ interface IGameControllerProps {
     handleReset: () => void;
     gameWon: boolean;
     loading: boolean;
+    gameRunning: boolean;
 }
 const GameController = ({
     handleGenerate,
     handleReset,
     gameWon,
     loading,
+    gameRunning,
 }: IGameControllerProps) => {
     const gridOptions = [
         { value: 5, label: "5x5" },
@@ -51,7 +53,10 @@ const GameController = ({
                         onChange={handleGridSizeChange}
                     />
                 </div>
-                <button onClick={() => handleGenerate(gridSize.value)}>
+                <button
+                    onClick={() => handleGenerate(gridSize.value)}
+                    disabled={gameRunning && !gameWon}
+                >
                     generate
                 </button>
             </div>
