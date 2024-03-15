@@ -7,14 +7,14 @@ interface IGameControllerProps {
     handleReset: () => void;
     gameWon: boolean;
     loading: boolean;
-    gameRunning: boolean;
+    gamePaused: boolean;
 }
 const GameController = ({
     handleGenerate,
     handleReset,
     gameWon,
     loading,
-    gameRunning,
+    gamePaused,
 }: IGameControllerProps) => {
     const gridOptions = [
         { value: 5, label: "5x5" },
@@ -55,7 +55,7 @@ const GameController = ({
                 </div>
                 <button
                     onClick={() => handleGenerate(gridSize.value)}
-                    disabled={gameRunning && !gameWon}
+                    disabled={loading || (!gamePaused && !gameWon)}
                 >
                     generate
                 </button>
@@ -71,8 +71,8 @@ const GameController = ({
                 <label htmlFor="expert-sizes-toggle">Expert Sizes</label>
                 {activateExperimental && (
                     <p>
-                        Warning: Grid loading may take a while and have poor
-                        performance
+                        Please note: Loading the grid might take some time and
+                        could affect performance.
                     </p>
                 )}
             </div>

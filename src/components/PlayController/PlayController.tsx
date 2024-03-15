@@ -12,8 +12,8 @@ interface IPlayControllerProps {
     handleUndo: () => void;
     undoActive: boolean;
     handlePause: () => void;
-    gameRunning: boolean;
-    marking: boolean;
+    gamePaused: boolean;
+    fillModeEnabled: boolean;
     toggleMarking: () => void;
 }
 
@@ -23,8 +23,8 @@ const PlayController = ({
     handleUndo,
     handlePause,
     undoActive,
-    gameRunning,
-    marking,
+    gamePaused,
+    fillModeEnabled,
     toggleMarking,
 }: IPlayControllerProps) => {
     const { isWon, cellsToBeMarked, cellsMarked } = progress;
@@ -39,7 +39,7 @@ const PlayController = ({
         <div className="playController container">
             <div className="timeContainer">
                 <button onClick={handlePause} disabled={isWon}>
-                    {gameRunning ? <FaPause /> : <FaPlay />}
+                    {gamePaused ? <FaPlay /> : <FaPause />}
                 </button>
                 <div className="timeDisplay">{formatTime(seconds)}</div>
             </div>
@@ -65,16 +65,20 @@ const PlayController = ({
                     <IoIosUndo />
                 </button>
                 <div className="toggle-container" onClick={toggleMarking}>
-                    <div className={`slider ${marking ? "active" : ""}`}>
+                    <div
+                        className={`slider ${fillModeEnabled ? "active" : ""}`}
+                    >
                         <div
                             className={`icon ${
-                                !marking ? "icon-inactive" : ""
+                                !fillModeEnabled ? "icon-inactive" : ""
                             }`}
                         >
                             <MdSquare />
                         </div>
                         <div
-                            className={`icon ${marking ? "icon-inactive" : ""}`}
+                            className={`icon ${
+                                fillModeEnabled ? "icon-inactive" : ""
+                            }`}
                         >
                             <MdClose />
                         </div>
