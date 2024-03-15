@@ -20,7 +20,7 @@ const AppHeader = () => {
                 </div>
                 |
                 <a
-                    href="https://github.com/timonkobusch/nonogram-react-vite"
+                    href="https://github.com/timonkobusch/nonogram"
                     target="_blank"
                 >
                     <IoLogoGithub size={"50px"} />

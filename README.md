@@ -5,11 +5,11 @@
 Welcome to the Nonogram Web App Repository! This is a fully functional web application for solving [nonograms](https://en.wikipedia.org/wiki/Nonogram), also known as picross or griddlers. Nonograms are grid-based puzzles where the goal is to determine which cells in a grid should be filled and which should be empty based on numerical clues provided for each row and column.
 
 The Web App can be found here:
-[timonkobusch.github.io/nonogram](timonkobusch.github.io/nonogram)
+[timonkobusch.github.io/nonogram](https://timonkobusch.github.io/nonogram)
 
 ## Live App
 
-[Nonogram Web App](timonkobusch.github.io/nonogram)
+[Nonogram Web App](https://timonkobusch.github.io/nonogram)
 
 ## Features
 
