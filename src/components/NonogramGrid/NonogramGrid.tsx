@@ -5,14 +5,14 @@ import React, { useState } from "react";
 interface IHintsProps {
     hintLines: number[][];
     finishedLines: boolean[];
-    gameRunning: boolean;
+    gamePaused: boolean;
     classIdentifier: string;
 }
 
 const Hints = ({
     hintLines,
     finishedLines,
-    gameRunning,
+    gamePaused,
     classIdentifier,
 }: IHintsProps) => {
     return (
@@ -20,7 +20,7 @@ const Hints = ({
             {hintLines.map((hintLine, i) => {
                 return (
                     <div key={i}>
-                        {!gameRunning ? (
+                        {gamePaused ? (
                             <div></div>
                         ) : (
                             hintLine.map((hint, index) => (
@@ -45,13 +45,13 @@ interface INonogramGridProps {
     nonogram: Nonogram;
     onMouseDownHandler: (x: number, y: number) => void;
     onMouseOverHandler: (x: number, y: number) => void;
-    gameRunning: boolean;
+    gamePaused: boolean;
 }
 const NonogramGrid = ({
     nonogram,
     onMouseDownHandler,
     onMouseOverHandler,
-    gameRunning,
+    gamePaused,
 }: INonogramGridProps) => {
     const [selectedCell, setSelectedCell] = useState<{
         row: number;
@@ -61,14 +61,14 @@ const NonogramGrid = ({
     const handleMouseDown =
         (row: number, col: number) => (e: React.MouseEvent) => {
             e.preventDefault();
-            if (!gameRunning || nonogram.progress.isWon) return;
+            if (gamePaused || nonogram.progress.isWon) return;
             onMouseDownHandler(row, col);
         };
 
     const handleMouseOver =
         (row: number, col: number) => (e: React.MouseEvent) => {
             e.preventDefault();
-            if (!gameRunning || nonogram.progress.isWon) return;
+            if (gamePaused || nonogram.progress.isWon) return;
             setSelectedCell({ row, column: col });
             onMouseOverHandler(row, col);
         };
@@ -87,14 +87,14 @@ const NonogramGrid = ({
             <Hints
                 hintLines={nonogram.hints.rows}
                 finishedLines={nonogram.finishedLines.rows}
-                gameRunning={gameRunning}
+                gamePaused={gamePaused}
                 classIdentifier={"left-hints"}
             />
             <table>
                 <Hints
                     hintLines={nonogram.hints.columns}
                     finishedLines={nonogram.finishedLines.columns}
-                    gameRunning={gameRunning}
+                    gamePaused={gamePaused}
                     classIdentifier={"top-hints"}
                 />
                 <tbody className="table">
@@ -110,9 +110,9 @@ const NonogramGrid = ({
                                             selectedCell.column === col
                                                 ? "highlighted"
                                                 : "";
-                                        const hideCell = gameRunning
-                                            ? ""
-                                            : "hide-cell";
+                                        const hideCell = gamePaused
+                                            ? "hide-cell"
+                                            : "";
                                         const gameWon = nonogram.progress.isWon
                                             ? "game-won"
                                             : "";

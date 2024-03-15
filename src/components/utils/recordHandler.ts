@@ -1,7 +1,6 @@
 // insert new record if not exists or if faster
 export const insertRecord = (grid: string, time: number): boolean => {
     const records = loadRecords();
-    console.log(records);
     const record = records.find((r) => r.grid === grid);
     if (!record || time < record.time) {
         const newRecords = records.filter((r) => r.grid !== grid);
@@ -10,7 +9,6 @@ export const insertRecord = (grid: string, time: number): boolean => {
         console.log(records);
         return true;
     }
-    console.log(records);
     return false;
 };
 // load array of records from local storage
