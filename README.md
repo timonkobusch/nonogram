@@ -2,7 +2,7 @@
 
 [![License MIT](https://img.shields.io/badge/licence-MIT-3498db.svg?style=popout-square)](https://choosealicense.com/licenses/mit/)
 
-Welcome to the Nonogram Web App Repository! This is a fully functional web application for solving [nonograms](https://en.wikipedia.org/wiki/Nonogram), also known as picross or griddlers. Nonograms are grid-based puzzles where the goal is to determine which cells in a grid should be filled and which should be empty based on numerical clues provided for each row and column.
+Welcome to the Nonogram Web App Repository! This is a fully functional web application for playing [nonograms](https://en.wikipedia.org/wiki/Nonogram), also known as picross. Nonograms are grid-based puzzles where the goal is to determine which cells in a grid should be filled and which should be empty based on numerical clues provided for each row and column. All puzzles are solvable with standard human-like strategies and are generated that way.
 
 The Web App can be found here:
 [timonkobusch.github.io/nonogram](https://timonkobusch.github.io/nonogram)
@@ -16,10 +16,6 @@ The Web App can be found here:
 -   Creates nonograms using human-like strategies, instead of brute force
 -   Intuitive user interface with useful controls: undo/forward, check for errors, reset
 -   Supports different puzzle sizes and difficulty levels.
-
-## Contributing
-
-Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
 ## Getting Started
 
@@ -45,9 +41,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 -   This project was inspired by [monkeyArms/nonogram](https://github.com/monkeyArms/nonogram) and fully recreated with a different solving algorithm in react
-
-## Contact
-
-For any inquiries or feedback, please contact via Issues.
-
-Happy nonogram solving! 🧩✨
